@@ -1,3 +1,10 @@
+Changes since 1.1:
+
+- a bunch of portability fixes, plus some minor code cleanup to make
+  things a little more comfortable on multiple platforms. Should now
+  compile on K&R-only systems, and on machines with wierd resolver
+  libraries.
+
 Changes since 1.0:
 
 - clarified the procmail recipe in INSTALL to include some logic to

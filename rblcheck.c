@@ -1,5 +1,5 @@
 /*
-** rblcheck 1.1 - Command-line interface to Paul Vixie's RBL filter.
+** rblcheck 1.2 - Command-line interface to Paul Vixie's RBL filter.
 ** Copyright (C) 1997, Edward S. Marshall <emarshal@logic.net>
 **
 ** This program is free software; you can redistribute it and/or modify
@@ -26,8 +26,19 @@
 **     size.
 **
 ** $Log$
-** Revision 1.1  2000/04/21 15:22:43  logic
-** Update to version 1.1.
+** Revision 1.2  2000/04/21 15:22:46  logic
+** Update to version 1.2.
+**
+** Revision 1.7  1998/01/28 22:11:31  emarshal
+** More portability stuff, and upgrade to version 1.2.
+**
+** Revision 1.6  1998/01/28 21:44:06  emarshal
+** Fixed compilation for systems without getshort() provided by the resolver
+** header files (NeXTSTEP).
+**
+** Revision 1.5  1998/01/28 21:32:15  emarshal
+** Fixes for compilation on ANSI-unfriendly systems (SunOS) and a Makefile
+** change for HP/UX 10.x.
 **
 ** Revision 1.4  1998/01/27 23:42:21  emarshal
 ** Version update.
@@ -52,9 +63,18 @@
 #include <resolv.h>
 #include <netdb.h>
 
-#define VERSION "1.1"
+#define VERSION "1.2"
+#define DOMAIN_LENGTH 32            /* "xxx.xxx.xxx.xxx.rbl.maps.vix.com" */
+#define RBLSITE "rbl.maps.vix.com"  /* What is the RBL root domain? */
 
-/* Some simple compatibility stuff for bind 4.x; 8.x defines them. */
+/*
+** PORTABILITY STUFF.
+** I'll happily take patches relating to this section, if you find a
+** platform that this doesn't compile on.
+*/
+
+/* Unabashedly borrowed from the bind 8.1.1 sources, just in case, since
+   bind 4.x defines these differently, and some don't even have this. */
 
 #ifndef NS_INT16SZ
 #define NS_INT16SZ 2
@@ -62,6 +82,16 @@
 
 #ifndef NS_INT32SZ
 #define NS_INT32SZ 4
+#endif
+
+#ifndef NS_GET16
+#define NS_GET16(s, cp) { \
+	register unsigned char *t_cp = (unsigned char *)(cp); \
+	(s) = ((unsigned short)t_cp[0] << 8) \
+	    | ((unsigned short)t_cp[1]) \
+	    ; \
+	(cp) += NS_INT16SZ; \
+}
 #endif
 
 /* This might actually be needed on other platforms. */
@@ -74,28 +104,33 @@
 #include <libc.h>
 #endif
 
-/* "xxx.xxx.xxx.xxx.rbl.maps.vix.com" */
-#define DOMAIN_LENGTH 32
+/* Some compilers dont understand 'const'. */
+#ifndef __STDC__
+#define const
+#endif
 
 const char * progname;
 
 void version()
 {
-	fprintf( stderr, "rblcheck " VERSION
-	  ", Copyright (C) 1997, 1998 Edward S. Marshall\n" );
+	fprintf( stderr,
+	  "rblcheck %s, Copyright (C) 1997, 1998 Edward S. Marshall\n",
+	  VERSION );
 }
 
 void usage()
 {
 	version();
-	fprintf( stderr, "Usage: %s [-q] [-t] [-v] [-h|-?] <address>\n\n"
-	  "    -q        Quiet mode; no output\n"
-	  "    -t        Print a TXT record, if any\n"
-	  "    -h, -?    Display this help message\n"
-	  "    -v        Display version information\n", progname );
+	fprintf( stderr, "Usage: %s [-q] [-t] [-v] [-h|-?] <address>\n\n\
+    -q        Quiet mode; no output\n\
+    -t        Print a TXT record, if any\n\
+    -h, -?    Display this help message\n\
+    -v        Display version information\n", progname );
 }
 
-int main( int argc, char * argv[] )
+int main( argc, argv )
+	int argc;
+	char **argv;
 {
 	extern int optind;
 	u_char answer[ PACKETSZ ];
@@ -148,7 +183,7 @@ int main( int argc, char * argv[] )
 	}
 
 	/* Create a domain name, in reverse. */
-	sprintf( domain, "%d.%d.%d.%d.rbl.maps.vix.com", d, c, b, a );
+	sprintf( domain, "%d.%d.%d.%d.%s", d, c, b, a, RBLSITE );
 
 	/* Make our DNS query. */
 	res_init();
@@ -188,8 +223,7 @@ int main( int argc, char * argv[] )
 		cp += ( NS_INT16SZ * 2 ) + NS_INT32SZ;
 
 		/* Get the length and end of the buffer. */
-		c = _getshort( cp );
-		cp += NS_INT16SZ;
+		NS_GET16( c, cp );
 		end = cp + c;
 
 		/* Iterate over any multiple answers we might have. In
