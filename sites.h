@@ -50,20 +50,6 @@
    for more current information. */
 /* SITE("3y.spam.mrs.kithrup.com") */
 
-/* ORBS: Open Relay Behaviour-modification System
-   http://www.orbs.org/
-   Please note: At the time of this writing (4-Jul-2001), these zones are
-   offline, and the website reports that the service has been discontinued. */
-/* SITE("inputs.orbs.org") */
-/* SITE("outputs.orbs.org") */
-/* SITE("delayed-outputs.orbs.org") */
-/* SITE("manual.orbs.org") */
-/* SITE("spamsources.orbs.org") */
-/* SITE("untestable-netblocks.orbs.org") */
-/* SITE("spamsource-netblocks.orbs.org") */
-/* SITE("testing.orbs.org") */
-/* SITE("ok.orbs.org") */
-
 /* ORBL: Open Relay Black List
    http://www.orbl.org/ */
 /* SITE("or.orbl.org") */

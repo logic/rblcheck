@@ -11,7 +11,7 @@ Prefix: %_prefix
 
 %description
 rblcheck is a very basic interface to RBL-style DNS listings such as those
-operated by the MAPS (http://www.maps.org/) and ORBS (http://www.orbs.org/)
+operated by the MAPS (http://www.maps.org/) and ORBL (http://www.orbl.org/)
 projects.
 
 %prep
