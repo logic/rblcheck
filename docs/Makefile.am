@@ -26,7 +26,7 @@ dist-hook: html/index.html rblcheck.ps rblcheck.rtf
 distclean-local:
 	-rmdir html
 
-install-data-local: rblcheck.html rblcheck.ps rblcheck.rtf
+install-data-local: html/index.html rblcheck.ps rblcheck.rtf
 	-for file in $(srcdir)/*.html; do \
 		basefile=`echo $$file | sed -e 's,^.*/,,'`; \
 		$(INSTALL_DATA) $$file $(DESTDIR)$(docdir)/$$basefile; \

@@ -24,6 +24,8 @@ TESTS = tests/clearlist tests/addlisting tests/removelisting $(XFAIL_TESTS)
 # in a "make distcheck". Since all tests are shell scripts, we're including
 # the full list verbatim.
 EXTRA_DIST = \
+	rblcheck.spec			\
+	rblcheck.spec.in		\
 	config/install-sh		\
 	config/missing			\
 	config/mkinstalldirs		\
@@ -42,5 +44,7 @@ SUBDIRS = docs .
 
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.in stamp-h.in \
 	$(AUX_DIST)
+
+DISTCLEANFILES = rblcheck.spec
 
 ACLOCAL = aclocal -I $(auxdir)

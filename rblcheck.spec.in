@@ -1,0 +1,39 @@
+Name: rblcheck
+Summary: A command-line interface to RBL-style listings.
+Version: @VERSION@
+Release: 1
+Source: http://download.sourceforge.neta/%{name}/%{name}-%{version}.tar.gz
+Group: Applications/Internet
+Copyright: GPL
+URL: http://rblcheck.sourceforge.net/
+BuildRoot: /var/tmp/%{name}-root
+Prefix: %_prefix
+
+%description
+rblcheck is a very basic interface to RBL-style DNS listings such as those
+operated by the MAPS (http://www.maps.org/) and ORBS (http://www.orbs.org/)
+projects.
+
+%prep
+%setup -q
+
+%build
+%configure
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+%makeinstall
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(-,root,root)
+%doc AUTHORS ChangeLog INSTALL NEWS README COPYING
+%doc docs/rblcheck.ps docs/rblcheck.rtf docs/html/
+%{_bindir}/rblcheck
+
+%changelog
+* Mon Apr  2 2001 Edward S. Marshall <esm@logic.net>
+- Created this RPM spec.

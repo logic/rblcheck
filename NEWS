@@ -9,7 +9,10 @@ Changes since 1.4:
   specifying an argument of '-'.
 
 - Updated sites.h to mesh with current reality (almost ALL of the sites
-  listed had changed since the last update).
+  listed had changed since the last update). Added a recommendation that
+  distribution maintainers NOT enable any of the listings by default.
 
 - Converted documentation to docbook, with a script for automatically
   generating html, ps, and rtf formats.
+
+- Added an RPM spec file.
