@@ -1,0 +1,43 @@
+-- GENERAL THANKS:
+
+Paul Vixie <paul@vix.com>: For the RBL itself, a fantastic tool for the
+	prevention of spam.
+
+The MAPS project <URL:http://maps.vix.com/>: A great gathering point for
+	protection services regarding email. Everyone there should be
+	given a pat on the back for the thankless hours they put into
+	maintaining an excellent resource for everyone.
+
+Stephen R. van den Berg <srb@cuci.nl>: For writing Procmail, a nifty
+	little mail filtering tool. While certainly not the only place
+	to use rblcheck, it's certainly one of the most useful.
+
+-- IDEA PEOPLE:
+
+Russell Nelson <nelson@crynwr.com>: suggested that reading IP address of
+	sender in the Received: lines in QMail might almost be a sane
+	thing to do. I still disagree, but hey, it works.
+
+Frank Tegtmeyer <fte@iqweb.de>: suggested the idea for the '-t' option
+	for displaying the TXT record.
+
+Anders Eriksson <aer@cdt.luth.se>: Pointed out that I failed to provide
+	a simple set of tests for people to try out.
+
+Kevin Kadow <kadokev@ripco.com>: suggested a novel use for rblcheck as
+	a means of rejecting email via inetd.
+
+-- CODE PEOPLE:
+
+Ophir Ronen <ophir@internap.com>: supplied the origip.pl script which
+	pulls the remote IP address from Sendmail Received: headers.
+
+Brian Willoughby <brianw@sounds.wa.com>: Supplied patches for NeXT.
+
+Gerald Pfeifer <pfeifer@dbai.tuwien.ac.at>: Supplied patches for version
+	output.
+
+-- BUG PEOPLE:
+
+Pat Myrto <pat@rwing.COM>
+Adam Shand <larry@alaska.net>

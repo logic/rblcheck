@@ -1,0 +1,17 @@
+Releases have been tested on the following platforms:
+
+1.1:
+
+Linux 2.x/libc5
+Solaris 2.6
+
+1.0:
+
+BSD/OS 2.1
+Digital Unix
+FreeBSD 2.2.5-STABLE
+NeXTSTEP (with patches)
+Linux 2.x+libc5
+Linux 2.x+glibc/libc6
+Solaris 2.5.1
+Solaris 2.6

@@ -1,0 +1,21 @@
+Changes since 1.0:
+
+- clarified the procmail recipe in INSTALL to include some logic to
+  prevent problems with local email if the system rblcheck is running
+  on has actually been blacklisted.
+
+- Noticed a glaring error in QMail support: TCPREMOTEIP is NOT passed
+  on to .qmail-executed programs. Damn.
+
+- added origip.c and origip.awk to obtain the sender's IP address from
+  QMail headers.
+
+- added "docs" and "utils" directories to organize things a bit better.
+
+- added "extern int optind;" to make some platforms a little happier.
+
+- fixed compilation on NeXT.
+
+- added some useful usage output, and added a '-v' flag for version info.
+
+- added a '-t' flag for displaying of TXT RRs.
