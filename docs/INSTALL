@@ -4,24 +4,66 @@ the README files all over the place.
 A transition to SGML-based documentation is under way. Refer to the
 file rlbcheck.sgml in this directory.
 
-The installation instructions for this test release differ from what
-is in the SGML file, though. What follows is a brief stopgap-type
-installation manual, which assumes you are vaguely familiar with
-Autoconf and related systems (experience with installing standard GNU
-tools should suffice).
+If you have downloaded the CVS source tree, the installation
+instructions in the SGML file will not suffice, though.
+
+What follows is a brief stopgap-type installation manual, which
+explains how to build a distribution from the CVS source tree. This
+assumes you are vaguely familiar with Autoconf and related systems.
+
+The distribution tarball doesn't require these tools to build, and
+comes with a ready-made copy of the ./configure script. If you're not
+curious and/or do not wish to work with the sources, just grab the
+distribution tarball and install from that.
+
+Here's what you need to build from the CVS sources:
 
  0. Disregard any mention of docs/INSTALL and ./configure in the
     "real" instructions for the time being.
 
- 1. In the root directory, run autoconf.
+ 1. In the root directory, run ./bootstrap
 
-    If you don't have autoconf on your system, see if you can fake it
-    with config/missing
+    This will run various auto-configuration tools. If you don't have
+    autoconf and automake, you will have insurmountable problems.
+    Nevertheless, if you want to understand whats going on, here's a
+    brief explanation.
 
- 2. If you like, edit sites.h.
+    aclocal will create ./aclocal.m4 for autoconf, based on the contents
+    of configure.in.
 
-    In particular, you may wish to uncomment ORBS and/or other popular
-    services which are commented out by default.
+    autoheader will create config.in based on the contents of acconfig.h
+    and configure.in.
+
+    automake will generate Makefile.in from Makefile.am.
+
+    autoconf, finally, will generate the ./configure shell script,
+    based on the contents of configure.in and aclocal.m4.
+
+    You can try your luck with the config/missing script if you don't
+    have exactly the needed tools.
+
+    Here's a crude schematic of the dependencies of these files:
+
+                Makefile.am ------> Makefile.in ----------> Makefile
+                           \         		/  ,> configure.cache
+        aclocal ---> aclocal.m4 ---> configure -----> config.status
+                           /    	        \  `> config.log
+                configure.in			 \
+        	            >-----> config.in ------------> config.h
+                 acconfig.h ------> stamp-h.in -----------> stamp-h
+
+    Also, some other files ending in .am or .in are source files for
+    other generated files; .am is used by automake to generate the
+    corresponding .in, file, and .in files are used by autoconf to
+    generate the actual target files.
+
+    See also the Autoconf and Automake Info documentation.
+
+ 2. In the root directory, edit sites.h.
+
+    All services are disabled by default, so you will end up with a
+    useless piece of binary unless you enable at least some of the
+    services in this file.
 
  3. Now, you can proceed to follow the instructions in ./INSTALL
 
