@@ -172,16 +172,38 @@ which has a complete breakdown of all of your options.
 
 <Section id="building_developers">
 <Title>Note to developers</Title>
-
 <Para>
-If you see a script called
-<Application>bootstrap</Application> in the main directory, then you are
-using a development release, and you will need a few extra tools to compile
-rblcheck. Specifically, you will need to make sure that autoconf and
-automake are installed correctly on your system before you can build. Once
-you have satisfied those requirements, please run
-<Application>./bootstrap</Application> from the main directory before
-running the <Application>./configure</Application> script mentioned above.
+If you see a script called <Application>bootstrap</Application> in the main
+directory, then you are using a development release. These releases are not
+meant for the faint of heart, and you may very well be unable to build them
+without a bit of work.
+</Para>
+<Para>
+You will need a number of utilities to build from a development source
+release, above and beyond the usual requirements for rblcheck:
+</Para>
+<ItemizedList>
+<ListItem><Para>
+<ULink url="http://sources.redhat.com/autoconf/">Autoconf</ULink> 2.13
+</Para></ListItem>
+<ListItem><Para>
+<ULink url="http://sources.redhat.com/automake/">Automake</ULink> 1.4
+</Para></ListItem>
+<ListItem><Para>
+<ULink url="http://sources.redhat.com/docbook-tools/">docbook-tools</ULink>
+0.6.8 (the RPM package identifies itself as docbook-utils)
+</Para></ListItem>
+</ItemizedList>
+<Para>
+Once you've verified that you have these installed, you'll need to run
+<Application>./bootstrap</Application> from the main rblcheck source
+directory, which will set up a few files needed. At this point, you can
+follow the usual instructions for building the application.
+</Para>
+<Para>
+If you are not building a development release, you do NOT need the above
+tools, and none of these instructions apply to you. Please see
+<XRef linkend="building_compiling"> for more details.
 </Para>
 </Section>
 
