@@ -110,7 +110,7 @@ int firstmatch = 0;
 void version()
 {
 	fprintf( stderr,
-	  "%s %s, Copyright (C) 1997, 1998, 1999, 2000, 2001 Edward S. Marshall\n",
+	  "%s %s\nCopyright (C) 1997, 1998, 1999, 2000, 2001 Edward S. Marshall\n",
 	  PACKAGE, VERSION );
 }
 

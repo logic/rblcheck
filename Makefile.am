@@ -12,14 +12,7 @@ bin_SCRIPTS = rbl
 
 XFAIL_TESTS = \
 	tests/maps/rbl/listed tests/maps/rbl/unlisted \
-	tests/maps/rss/listed tests/maps/rss/unlisted \
-	tests/orbs/inputs/listed tests/orbs/inputs/unlisted \
-	tests/orbs/outputs/listed tests/orbs/outputs/unlisted \
-	tests/orbs/delayed-outputs/listed tests/orbs/delayed-outputs/unlisted \
-	tests/orbs/manual/listed tests/orbs/manual/unlisted \
-	tests/orbs/spamsources/listed tests/orbs/spamsources/unlisted \
-	tests/orbs/untestable-netblocks/listed tests/orbs/untestable-netblocks/unlisted \
-	tests/orbs/spamsource-netblocks/listed tests/orbs/spamsource-netblocks/unlisted
+	tests/maps/rss/listed tests/maps/rss/unlisted
 TESTS = tests/clearlist tests/addlisting tests/removelisting $(XFAIL_TESTS)
 
 # We don't include README.ALPHA or bootstrap here, so we don't include them
