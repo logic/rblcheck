@@ -1,11 +1,12 @@
 ## Process this file with automake to produce Makefile.in
 
-AUTOMAKE_OPTIONS = 1.4
+auxdir = @ac_aux_dir@
+AUX_DIST = $(auxdir)/install-sh $(auxdir)/missing $(auxdir)/mkinstalldirs
 
-SUBDIRS = .
+noinst_HEADERS = sites.h
 
 bin_PROGRAMS = rblcheck
-rblcheck_SOURCES = rblcheck.c sites.h
+rblcheck_SOURCES = rblcheck.c
 
 EXTRA_DIST = \
 	README.ALPHA			\
@@ -28,16 +29,9 @@ EXTRA_DIST = \
 	utils/qmail/origip.c		\
 	utils/sendmail/origip.pl
 
-.PHONY: files release sanity snapshot
+SUBDIRS = .
 
-files:
-	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
-	  echo $$p; \
-	done
+MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.in stamp-h.in \
+	$(AUX_DIST)
 
-release:
-	rm -rf .deps */.deps
-	$(MAKE) distcheck
-
-snapshot:
-	$(MAKE) dist distdir=$(PACKAGE)-`date +"%y%m%d"`
+ACLOCAL = aclocal -I $(auxdir)
