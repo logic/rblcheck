@@ -1,5 +1,5 @@
-PKG="@NAME@"
-NAME="@NAME@"
+PKG="@PACKAGE@"
+NAME="@PACKAGE@"
 VERSION="@VERSION@"
 ARCH="sparc"
 CATEGORY="system"
