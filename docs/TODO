@@ -1,6 +1,8 @@
 - follow CNAMEs from rblcheck(). This will let us get at the eventual
   TXT RRs for a domain name.
 
+- optional support for adns (http://www.gnu.org/software/adns/adns.html).
+
 - an option to "exit on first match", so that after the first failure,
   further checks are skipped, speeding up rejection if there is no
   interest in the specifics of the results.
@@ -18,4 +20,4 @@
   a '-v X' option, where 'X' is a number between 0 and 9 (0 being silent,
   4 being default/ordinary output, 9 displaying heavy debugging info).
 
-Send ideas to "esm@logic.net".
+Send ideas to "rblcheck-users@lists.sourceforge.net".

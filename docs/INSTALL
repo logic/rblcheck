@@ -1,20 +1,20 @@
 rblcheck 1.5 - Command-line interface to RBL-style filters.
 Copyright (C) 1997, 1998, 1999, 2000, 2001,
- Edward S. Marshall <esm@logic.net>
+Edward S. Marshall <esm@logic.net>
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option)
+any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+675 Mass Ave, Cambridge, MA 02139, USA.
 
 -- Building:
 
@@ -25,33 +25,34 @@ around the SITE(...) line).
 To compile rblcheck, just type "./configure" in the main directory,
 followed by "make" when the first command is complete.
 
+Note to distributors: I highly recommend leaving everything commented out
+in sites.h; this was really only added as a convenience mechanism for
+personal builds, not for a distributor to "help" the user set policy.
 
 -- Using:
 
-When invoked, rblcheck returns either -1 (for serious failure), 0 (to
-indicate that the IP address is not filtered by any of the RBL-alike
-services), or a positive number (indicating the number of filters that the
-IP address is filtered by).
+When invoked, rblcheck returns either 0 (to indicated error, or that the
+address was not in any of the listings), or a positive number (indicating
+the number of listings that the IP address was found in).
 
 The program has several command line options:
 
--q      Be quiet about whether the IP address matched the filter or not.
-        Handy for automatic processing scripts which just check the return
-        code of rblcheck.
+-q      Be quiet about whether the IP address was matched or not. Handy for
+        automatic processing scripts which just check the return code of 
+        rblcheck.
 
 -t      Display, if available, a textual description of why the site was
-        originally placed in a particular filter.
+        originally placed in a particular listing.
 
--l      List the currently defined RBL filters. By default, rblcheck will
-        check "rbl.maps.vix.com" and "rbl.dorkslayers.com". You can change
-        these defaults easily by editing rblcheck.c and changing the lines
-        in main() which call togglesite().
+-l      List the currently defined RBL listings. By default, rblcheck has
+        no pre-defined listings; you can change this behavior by editing
+        the file "sites.h" as described above in "Building".
 
--c      Clear the list of defined RBL filters. This is handy if you don't
-        know what default filters might be defined on a system, and wish
-        to hand-pick your list of filters.
+-c      Clear the list of defined RBL listings. This is handy if you don't
+        want to use the default listings added by the installation of 
+        rblcheck on your system.
 
--s <service> Toggle a service to the list of defined RBL filters.
+-s <service> Toggle a service in the list of defined RBL listings.
 
 -h, -?  Get help about rblcheck.
 
@@ -60,19 +61,18 @@ The program has several command line options:
 To verify that the program is working after you've compiled it, try the
 following test:
 
-	% rblcheck 127.0.0.2
-	RBL filtered by rbl.maps.vix.com
-        RBL filtered by rbl.dorkslayers.com
-	% rblcheck 127.0.0.1
-	not RBL filtered by rbl.maps.vix.com
-        not RBL filtered by rbl.dorkslayers.com
+	$ ./rblcheck -s blackholes.mail-abuse.org 127.0.0.1
+	127.0.0.1 not RBL filtered by blackholes.mail-abuse.org
+	$ ./rblcheck -s blackholes.mail-abuse.org 127.0.0.2
+	127.0.0.2 RBL filtered by blackholes.mail-abuse.org
 
-If you get any other result from those two checks, then something has
-gone terribly wrong, and you should email me with what happens. If it
-works, go ahead and use it in good health, knowing that you've made
-your world a better place to be. Well, ok, how about knowing that you
-won't be getting nearly as much spam as you currently are? :-)
+If you see any other result than the above, then something has gone wrong;  
+please see below about reporting bugs and finding help.
 
+You can check multiple addresses at once, to make life a little easier with
+scripts; just add additional addresses on the command line after all of the
+options. By specifying an address of "-", rblcheck will read from stdin and
+perform a lookup on every line of input (if it is a valid IP address).
 
 -- Using rblcheck with Procmail:
 
@@ -85,7 +85,7 @@ below on Sendmail and QMail for ideas on how you can get ahold of this
 value.
 
 The following procmail rule will, once you have TCPREMOTEIP, use rblcheck
-to look up the IP address in the MAPS RBL filter:
+to look up the IP address in the built-in filters:
 
 :0
 * ! ? if [ -n "$TCPREMOTEIP" ]; then rblcheck -q "$TCPREMOTEIP"; fi
@@ -137,7 +137,6 @@ e) check your procmail log and mailbox. If the message didn't go
    through, you have a problem. If you have a copy of the message in
    your mailbox, and no errors in your log file, you're fine.
 
-
 -- Using rblcheck with Sendmail:
 
 This solution for obtaining the IP address of the connecting host could be
@@ -147,7 +146,7 @@ your system administrator about the possibility of installing the
 sendmail.cf patch below. Point them at this file as a source of
 information.
 
-Currently, in your sendmail.cf file, you'll probably something like:
+Currently, in your sendmail.cf file, you'll probably have something like:
 
 Mlocal,	P=/bin/mail, F=lsDFMAw5:/|@SnE, S=10/30, R=20/40,
 	T=DNS/RFC822/X-Unix,
@@ -192,7 +191,6 @@ executed programs that I can see with sendmail. What would -really- be
 nice here would be a way to program how Sendmail sets up the environment
 before executing an external program, at the point of execution. Bug the
 Sendmail developers if you agree with me. ;-)
-
 
 -- Using rblcheck with QMail:
 
@@ -248,7 +246,6 @@ awk script. However, the C version is probably more prone to bugs. ;-)
 Once you have that line in place, go ahead and use the procmail recipe
 supplied above in good health.
 
-
 -- Using rblcheck with inetd and smtpd:
 
 If you use an smtp server which runs from inetd (sendmail can operate this
@@ -260,8 +257,17 @@ smtpd: ALL: spawn /usr/local/bin/rblcheck -q %a && \
 	"469 Connection refused. See http://maps.vix.com/rbl/\r\b\r\n"
 
 This gives you RBL support on a site-wide basis, even if native support
-doesn't yet exist for your MTA of choice.
+doesn't yet exist for your MTA of choice. This assumes that your inetd has 
+support for tcp_wrappers checks; many Linux variants fall into this 
+category, but other platforms may differ.
 
+A word of warning, however: there are a number of very good reasons to not
+run a production mail server from inetd, which I won't elaborate on here.  
+You might want to investigate more secure and reliable alternatives, such
+as tcpserver from D. J. Bernstein's excellent daemontools package,
+available at:
+
+        http://cr.yp.to/daemontools.html
 
 -- Other mailers/other filter packages:
 
@@ -269,7 +275,6 @@ Don't ask me. If you figure out a way to make this work under another
 setup, let me know how you did it, and I'll add it here. If you find
 better ways of doing this than the ones I'm using above, let me know too,
 and you'll see your idea show up in here in the next release.
-
 
 -- Notes on origip:
 
@@ -291,3 +296,21 @@ time, and over 30,000 less page faults. In other words: a LOT easier on
 the box you'll be running this on. This test was run on a little under 600
 messages, from various mailing lists and private messages, on a Linux
 2.0.31 system.
+
+-- Reporting problems:
+
+If you're in need of assistance, a (very low volume) mailing list for
+rblcheck users has been set up; to subscribe, simply send an email to
+rblcheck-users-subscribe@lists.sourceforge.net, answer the confirmation
+email, and you'll be able to post your questions. The archives for the
+mailing list are available at:
+
+        http://www.geocrawler.com/lists/3/SourceForge/1600/0/
+
+All software has bugs, and rblcheck has a place for you to report them if 
+you believe you've found one; please visit:
+
+        http://sourceforge.net/bugs/?group_id=2081
+
+If you have a SourceForge account already, please log in before reporting 
+a bug so that you can be notified of changes.
