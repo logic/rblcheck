@@ -332,7 +332,7 @@ int main( argc, argv )
 	int argc;
 	char **argv;
 {
-	int a, b, c, d;
+	int a;
 	struct rbl * ptr;
 	int rblfiltered = 0;
 	char inbuf[ RESULT_SIZE ];
