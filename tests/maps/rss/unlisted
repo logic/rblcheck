@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Verify that we get no return value for an unlisted address.
+
+if ! ./rblcheck -c -s relays.mail-abuse.org 127.0.0.1
+then
+	exit 1
+fi

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Verify that we get successfully poll a listed address.
+
+if ./rblcheck -c -s relays.mail-abuse.org 127.0.0.2
+then
+	exit 1
+fi

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Verify that we get successfully poll a listed address.
+
+if ./rblcheck -c -s manual.orbs.org 127.0.0.5
+then
+	exit 1
+fi

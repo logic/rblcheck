@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Clear the list, then display it. Should result in an empty listing.
+
+if test -n "`./rblcheck -c -l 2>&1`"
+then
+	exit 1
+fi

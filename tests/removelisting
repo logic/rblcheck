@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Clear the list, add an entry, toggle it off, then display (hopefully) blank.
+
+if test -n "`./rblcheck -c -s testlisting -s testlisting -l 2>&1`"
+then
+	exit 1
+fi

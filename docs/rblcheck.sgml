@@ -146,9 +146,25 @@ around the <ComputerOutput>SITE(...)</ComputerOutput> line).
 <Para>
 To compile rblcheck, just run <Application>./configure</Application> in
 the main directory, followed by <Application>make</Application> when the
-first command is complete. For more details on how the
-<Application>configure</Application> command works, please see the file
-<Filename>INSTALL</Filename> in the main directory.
+first command is complete.
+</Para>
+
+<Para>
+To make sure that what you now have works correctly, run <Application>make
+check</Application>; make sure that you have an Internet connection handy when
+you do, or a large number of the tests will produce (non-fatal) failures.
+</Para>
+
+<Para>
+When you are done, you can type <Application>make install</Application> to
+install the software (by default, everything will be installed in
+<Filename>/usr/local</Filename>.
+</Para>
+
+<Para>
+For more details on how the <Application>configure</Application> command
+works, please see the file <Filename>INSTALL</Filename> in the main directory,
+which has a complete breakdown of all of your options.
 </Para>
 </Section>
 
