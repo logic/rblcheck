@@ -1,5 +1,5 @@
 /*
-** rblcheck 1.4 - Command-line interface to Paul Vixie's RBL filter.
+** rblcheck 1.5 - Command-line interface to RBL-style filters.
 ** Copyright (C) 1997, Edward S. Marshall <emarshal@logic.net>
 **
 ** This program is free software; you can redistribute it and/or modify
@@ -18,66 +18,11 @@
 **
 ** $Id$
 **
-** Revision history:
-**
-** $Log$
-** Revision 1.4  2000/04/21 15:22:51  logic
-** Update to version 1.4.
-**
-** Revision 1.13  1998/08/20 05:47:03  emarshal
-** Some final cleanups. Bumped version to 1.4.
-**
-** Revision 1.12  1998/08/20 05:32:07  emarshal
-** Dynamically allocate the res_query() buffer, to ensure we get all we
-** asked for. This makes the assumption that res_query() returns the real
-** size of the packet; Paul Vixie and other BIND maintainers have confirmed
-** this, so it should be safe (even if it's undocumented).
-**
-** Revision 1.11  1998/08/20 05:10:28  emarshal
-** Fixed error with rblcheck return values, pointed out by Thomas Meyer.
-**
-** Revision 1.10  1998/08/20 04:58:31  emarshal
-** Added a fix for systems where T_TXT isn't defined (like SunOS 4.x).
-**
-** Revision 1.9  1998/08/15 22:27:27  emarshal
-** Fixed some formatting issues with combinations of -q and -t.
-**
-** Revision 1.8  1998/08/15 22:09:35  emarshal
-** Many changes, most involving support for multiple RBL-alike services.
-** Bumped revision to 1.3.
-**
-** Revision 1.7  1998/01/28 22:11:31  emarshal
-** More portability stuff, and upgrade to version 1.2.
-**
-** Revision 1.6  1998/01/28 21:44:06  emarshal
-** Fixed compilation for systems without getshort() provided by the resolver
-** header files (NeXTSTEP).
-**
-** Revision 1.5  1998/01/28 21:32:15  emarshal
-** Fixes for compilation on ANSI-unfriendly systems (SunOS) and a Makefile
-** change for HP/UX 10.x.
-**
-** Revision 1.4  1998/01/27 23:42:21  emarshal
-** Version update.
-**
-** Revision 1.3  1998/01/27 02:09:56  emarshal
-** Added support for returning TXT records associated with
-** RBL-filtered addresses.
-**
-** Revision 1.2  1998/01/23 22:05:27  emarshal
-** Some quick changes.
-**
-** Revision 1.1.1.1  1998/01/09 20:42:50  emarshal
-** Initial import into CVS.
-**
-** 08-Dec-97 [emarshal@logic.net]: Patched to properly use res_query()
-**     responses, instead of just hoping for the best with a packet
-**     size.
-** 27-Nov-97 [emarshal@logic.net]: Created.
 */
 
+#include "config.h"
+
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -85,23 +30,21 @@
 #include <resolv.h>
 #include <netdb.h>
 
-#define VERSION "1.4"
+/*-- PORTABILITY ------------------------------------------------------------*/
 
-#define RESULT_SIZE 4096 /* What is the longest result text we support? */
+#ifdef STDC_HEADERS
+#include <stdlib.h>
+#endif
 
-/* Simple linked list to hold the sites we support. See below to see how
-   to change the default list of servers. */
-struct rbl
-{
-	char * site;
-	struct rbl * next;
-};
+/* getopt() handling, for Linux (and probably others) */
+#ifdef HAVE_GETOPT_H
+#include <getopt.h>
+#endif
 
-/*
-** PORTABILITY STUFF.
-** I'll happily take patches relating to this section, if you find a
-** platform that this doesn't compile on.
-*/
+/* NeXT puts optind's declaration in libc.h. */
+#ifdef HAVE_LIBC_H
+#include <libc.h>
+#endif
 
 /* Unabashedly borrowed from the bind 8.1.1 sources, just in case, since
    bind 4.x defines these differently, and some don't even have this. */
@@ -132,30 +75,41 @@ struct rbl
 #define PACKETSZ 512
 #endif
 
-/* This might actually be needed on other platforms. */
-#if defined(linux)
-#include <getopt.h>
-#endif
+/*-- LOCAL DEFINITIONS ------------------------------------------------------*/
 
-/* NeXT puts optind's declaration in libc.h. */
-#ifdef NeXT
-#include <libc.h>
-#endif
+#define RESULT_SIZE 4096 /* What is the longest result text we support? */
 
-/* Some compilers dont understand 'const'. */
-#ifndef __STDC__
-#define const
-#endif
+/*-- GLOBAL VARIABLES -------------------------------------------------------*/
 
+/* Simple linked list to hold the sites we support. See below to see how
+   to change the default list of servers. */
+struct rbl
+{
+	char * site;
+	struct rbl * next;
+};
+struct rbl * rblsites = NULL;
+
+/* Name the program was invoked as. */
 const char * progname;
 
+/* Global options. */
+int quiet = 0;
+int txt = 0;
+
+/*-- FUNCTIONS --------------------------------------------------------------*/
+
+/* version()
+ * Display the version of this program back to the user. */
 void version()
 {
 	fprintf( stderr,
-	  "rblcheck %s, Copyright (C) 1997, 1998 Edward S. Marshall\n",
-	  VERSION );
+	  "%s %s, Copyright (C) 1997, 1998 Edward S. Marshall\n",
+	  PACKAGE, VERSION );
 }
 
+/* usage()
+ * Display how to use this program back to the user. */
 void usage()
 {
 	version();
@@ -176,10 +130,13 @@ struct rbl * togglesite( char * sitename, struct rbl * sites )
 {
 	struct rbl * ptr;
 	struct rbl * last = NULL;
+	int sitelen;
+
+	sitelen = strlen( sitename );
 
 	for( ptr = sites; ptr != NULL; last = ptr, ptr = ptr->next )
 	{
-		if( ( strlen( ptr->site ) == strlen( sitename ) ) &&
+		if( ( strlen( ptr->site ) == sitelen ) &&
 		  ( ! strcmp( ptr->site, sitename ) ) )
 		{
 			if( last )
@@ -191,12 +148,22 @@ struct rbl * togglesite( char * sitename, struct rbl * sites )
 			return sites;
 		}
 	}
-	ptr = ( struct rbl * )malloc( sizeof( struct rbl ) );
+	if( ! ( ptr = ( struct rbl * )malloc( sizeof( struct rbl ) ) ) )
+	{
+		perror( "malloc failed" );
+		exit( 1 );
+	}
 	if( last )
 		last->next = ptr;
 	else
 		sites = ptr;
-	ptr->site = strdup( sitename );
+	if( ( ptr->site = ( char * )malloc( sitelen + 1 ) ) )
+		strcpy( ptr->site, sitename );
+	else
+	{
+		perror( "malloc failed" );
+		exit( 1 );
+	}
 	ptr->next = NULL;
 	return sites;
 }
@@ -306,23 +273,65 @@ char * rblcheck( int a, int b, int c, int d, char * rbldomain, int txt )
 	return result;
 }
 
+/* full_rblcheck
+ * Takes an IP address, and feeds it to rblcheck() for each defined
+ * RBL listing, handling output of results if necessary. */
+int full_rblcheck( char * addr )
+{
+	int a, b, c, d;
+	int count = 0;
+	char * response;
+	struct rbl * ptr;
+
+	if( sscanf( addr, "%d.%d.%d.%d", &a, &b, &c, &d ) != 4
+	  || a < 0 || a > 255 || b < 0 || b > 255 || c < 0 || c > 255
+	  || d < 0 || d > 255 )
+	{
+		fprintf( stderr, "%s is an invalid IP address\n", addr );
+		return 0;
+	}
+	for( ptr = rblsites; ptr != NULL; ptr = ptr->next )
+	{
+		response = rblcheck( a, b, c, d, ptr->site, txt );
+		if( !quiet || response )
+			printf( "%s %s%s%s%s%s%s", addr,
+			  ( !quiet && !response ? "not " : "" ),
+			  ( !quiet ? "RBL filtered by " : "" ),
+			  ( !quiet ? ptr->site : "" ),
+			  ( txt && response && strlen( response ) && !quiet ?
+			    ": " : "" ),
+			  ( txt && response ? response : "" ),
+			  ( quiet && ( !txt || ( response &&
+			    !strlen( response ) ) ) ? "" : "\n" ) );
+		if( response )
+		{
+			count++;
+			free( response );
+		}
+	}
+	return count;
+}
+
+/*-- MAINLINE ---------------------------------------------------------------*/
+
 int main( argc, argv )
 	int argc;
 	char **argv;
 {
 	extern int optind;
 	int a, b, c, d;
-	int quiet = 0;
-	int txt = 0;
-	int rblfiltered = 0;
-	char * response;
-	struct rbl * rblsites = NULL;
 	struct rbl * ptr;
+	int rblfiltered = 0;
+	char inbuf[ RESULT_SIZE ];
 
-	/* Add more sites you want in the default list of RBL-alike
-	   systems here. ### An easier way to change this is needed. ### */
-	rblsites = togglesite( "rbl.maps.vix.com", rblsites );
-	rblsites = togglesite( "rbl.dorkslayers.com", rblsites );
+	/* This is a glorious hack, but the average person should be able
+	   to deal with adding sites this way. As a bonus, you can add
+	   arbitrary code into rblcheck this way, without modifying the
+	   source directly. Not sure how incredibly useful that is, but
+	   hey, it's there. ;-) */
+#define SITE(x) rblsites = togglesite( (x), rblsites );
+#include "sites.h"
+#undef SITE
 
 	progname = argv[ 0 ];
 
@@ -367,6 +376,7 @@ int main( argc, argv )
 				return 0;
 		}
 
+	/* Did they tell us to check anything? */
 	if( optind == argc )
 	{
 		fprintf( stderr, "%s: no IP address specified\n",
@@ -375,26 +385,21 @@ int main( argc, argv )
 		return -1;
 	}
 
-	if( sscanf( argv[ optind ], "%d.%d.%d.%d", &a, &b, &c, &d ) != 4 ||
-	  a < 0 || a > 255 || b < 0 || b > 255 || c < 0 || c > 255 ||
-	  d < 0 || d > 255 )
+	/* Loop through the rest of the command line, checking each IP
+	   address specified. */
+	while( optind < argc )
 	{
-		fprintf( stderr, "%s: invalid IP address\n", progname );
-		usage();	
-		return -1;
-	}
-
-	for( ptr = rblsites; ptr != NULL; ptr = ptr->next )
-	{
-		response = rblcheck( a, b, c, d, ptr->site, txt );
-		printf( "%s%s%s%s%s%s", !quiet && !response ? "not " : "",
-		  !quiet ? "RBL filtered by " : "", !quiet ? ptr->site : "",
-		  txt && response && strlen( response ) && !quiet ? ": " : "",
-		  txt && response ? response : "",
-		  quiet && ( !txt || !strlen( response ) ) ? "" : "\n" );
-		if( response )
-			rblfiltered++;
-		free( response );
+		if( ! strncmp( "-", argv[ optind ], 1 ) )
+			while( fgets( inbuf, RESULT_SIZE - 1, stdin ) != NULL )
+			{
+				inbuf[ strlen( inbuf ) - 1 ] = '\0';
+				rblfiltered += full_rblcheck( inbuf );
+			}
+		else
+			rblfiltered += full_rblcheck( argv[ optind ] );
+		optind++;
 	}
 	return rblfiltered;
 }
+
+/* EOF */

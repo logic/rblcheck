@@ -1,11 +1,12 @@
 I speculate that this release will compile on the following platforms. If
 you have a success story on something else, let me know at emarshal@logic.net.
 
+AIX
 BSD/OS 2.1
 Digital UNIX
 FreeBSD 2.2.x
 HP/UX 10.x
-Linux 2.x+libc5
-Linux 2.x+glibc/libc6
+Linux 2.x/libc5
+Linux 2.x/libc6
 SunOS 4.x
 Solaris 2.x

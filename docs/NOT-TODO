@@ -1,0 +1,11 @@
+These are the features that you'll never see in the version of rblcheck
+that I produce (rblcheck is GPL; you're free to produce your own version
+if this doesn't suit you well), and the rationale behind why not.
+
+Support for doing lookups of FQDNs: This is a futile method of checking
+    whether a particular system is blackholed; if the originating system
+    has control of reverse DNS for their IP space, they can make their IP
+    address resolve to anything they want, such as system.network.com. If
+    rblcheck were to do a lookup on that, "system.network.com" might
+    resolve to anything (such as "127.0.0.1, which will always pass with
+    every currently known RBL-based blacklist).

@@ -3,8 +3,8 @@
 # $Id$
 #
 # $Log$
-# Revision 1.4  2000/04/21 15:22:51  logic
-# Update to version 1.4.
+# Revision 1.5  2000/04/21 15:22:54  logic
+# Update to alpha release 19990221.
 #
 # Revision 1.1  1998/01/27 02:10:33  emarshal
 # Added dump.c, a quick utility for dumping an RR (sort of);

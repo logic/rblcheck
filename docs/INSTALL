@@ -1,4 +1,4 @@
-rblcheck 1.4 - Command-line interface to Paul Vixie's RBL filter.
+rblcheck 1.5 - Command-line interface to RBL-style filters.
 Copyright (C) 1997, Edward S. Marshall <emarshal@logic.net>
 
 This program is free software; you can redistribute it and/or modify
@@ -15,13 +15,17 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
--- Compiling:
+-- Building:
 
-To compile rblcheck, simple edit the file "Makefile" to tastes; the
-defaults are for gcc, but this program should compile happily on other
-compilers. When you are satisfied with your compiler settings in Makefile,
-type "make" and the program will try to compile. On some systems, you'll
-need to add "-lresolv" to LDLIBS (Solaris, for example).
+Before building rblcheck, edit the file "sites.h" for the listings you
+wish to check against (to un-comment a listing, remove the /* and */
+around the SITE(...) line).
+
+To compile rblcheck, just type "./configure" in the main directory,
+followed by "make" when the first command is complete.
+
+
+-- Using:
 
 When invoked, rblcheck returns either -1 (for serious failure), 0 (to
 indicate that the IP address is not filtered by any of the RBL-alike
@@ -46,7 +50,7 @@ The program has several command line options:
         know what default filters might be defined on a system, and wish
         to hand-pick your list of filters.
 
--s <service> Add a new service to the list of defined RBL filters.
+-s <service> Toggle a service to the list of defined RBL filters.
 
 -h, -?  Get help about rblcheck.
 
