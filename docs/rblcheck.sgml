@@ -36,14 +36,6 @@
    A copy of the license is included in <XRef linkend="fdl">.
   </Para>
  </LegalNotice>
- <RevHistory>
-  <Revision>
-   <RevNumber>1.0</RevNumber>
-   <Date>20 Mar 2001</Date>
-   <AuthorInitials>esm</AuthorInitials>
-   <RevRemark>First implementation of rblcheck documentation in docbook format.</RevRemark>
-  </Revision>
- </RevHistory>
 </BookInfo>
 
 <Part id="main">
@@ -81,6 +73,69 @@ license.
 <Chapter id="building">
 <Title>Building</Title>
 
+<Section id="building_platforms">
+<Title>Supported Platforms</Title>
+
+<Para>
+I currently perform a manual build and test of rblcheck on the following
+platforms prior to each release:
+<ItemizedList>
+<ListItem><Para>
+<ULink url="http://www.redhat.com/">Red Hat</ULink> Linux 7.0/Intel
+</Para></ListItem>
+<ListItem><Para>
+<ULink url="http://www.debian.org/">Debian</ULink> GNU/Linux 2.2r2/Intel
+</Para></ListItem>
+<ListItem><Para>
+<ULink url="http://www.sun.com/">Sun</ULink> Solaris 7/SPARC
+</Para></ListItem>
+</ItemizedList>
+</Para>
+
+<Para>
+I speculate that most releases will compile on the following platforms:
+<ItemizedList>
+<ListItem><Para>
+<ULink url="http://www.sun.com/">Sun</ULink> SunOS 4.x
+</Para></ListItem>
+<ListItem><Para>
+<ULink url="http://www.sun.com/">Sun</ULink> Solaris 2.x/7/8
+</Para></ListItem>
+<ListItem><Para>
+<ULink url="http://www.ibm.com/">IBM</ULink> AIX 4.3.3
+</Para></ListItem>
+<ListItem><Para>
+<ULink url="http://www.bsdi.com/">BSDI</ULink> BSD/OS 2.x/3.x/4.x
+</Para></ListItem>
+<ListItem><Para>
+<ULink url="http://www.freebsd.org/">FreeBSD</ULink> 2.x/3.x/4.x
+</Para></ListItem>
+<ListItem><Para>
+<ULink url="http://www.compaq.com/">Compaq</ULink> Digital UNIX/Tru64 4.0x
+</Para></ListItem>
+<ListItem><Para>
+<ULink url="http://www.hp.com/">Hewlett-Packard</ULink> HP/UX 10.x/11.x
+</Para></ListItem>
+<ListItem><Para>
+Most versions of <ULink url="http://www.linux.com/">Linux</ULink>
+(libc5- and glibc-based)
+</Para></ListItem>
+<ListItem><Para>
+Almost any relatively POSIX platform with a resolver library.
+</Para></ListItem>
+</ItemizedList>
+</Para>
+
+<Para>
+Please send success reports (and what, if anything, you had to change to
+make rblcheck build) for your platform of choice to
+<EMail>rblcheck-users@lists.sourceforge.net</EMail>.
+</Para>
+</Section>
+
+<Section id="building_compiling">
+<Title>Compiling</Title>
+
 <Para>
 Before building rblcheck, edit the file <Filename>sites.h</Filename> for
 the listings you wish to check against (to un-comment a listing, remove
@@ -95,9 +150,13 @@ first command is complete. For more details on how the
 <Application>configure</Application> command works, please see the file
 <Filename>INSTALL</Filename> in the main directory.
 </Para>
+</Section>
+
+<Section id="building_developers">
+<Title>Note to developers</Title>
 
 <Para>
-Note to developers: if you see a script called
+If you see a script called
 <Application>bootstrap</Application> in the main directory, then you are
 using a development release, and you will need a few extra tools to compile
 rblcheck. Specifically, you will need to make sure that autoconf and
@@ -106,14 +165,19 @@ you have satisfied those requirements, please run
 <Application>./bootstrap</Application> from the main directory before
 running the <Application>./configure</Application> script mentioned above.
 </Para>
+</Section>
+
+<Section id="building_distributors">
+<Title>Note to distributors</Title>
 
 <Para>
-Note to distributors: I highly recommend leaving everything commented out
+I highly recommend leaving everything commented out
 in <Filename>sites.h</Filename>; this was really only added as a convenience
 mechanism for personal builds, not for a distributor to
 <Emphasis>help</Emphasis> the user set policy. Your users may be smarter
 than you think; let them make up their own mind.
 </Para>
+</Section>
 </Chapter>
 
 <Chapter id="using">
@@ -220,7 +284,7 @@ also serves an important role working with other software, such as mail
 servers and email filtering programs.
 </Para>
 
-<Section id="procmail">
+<Section id="thirdparty_procmail">
 <Title>Procmail</Title>
 
 <Para>
@@ -313,7 +377,7 @@ your mailbox, and no errors in your log file, you're fine.
 </OrderedList>
 </Section>
 
-<Section id="sendmail">
+<Section id="thirdparty_sendmail">
 <Title>Sendmail</Title>
 
 <Para>
@@ -396,7 +460,7 @@ Sendmail developers if you agree with me. ;-)
 </Para>
 </Section>
 
-<Section id="qmail">
+<Section id="thirdparty_qmail">
 <Title>QMail</Title>
 
 <Para>
@@ -471,7 +535,7 @@ supplied above in good health.
 </Para>
 </Section>
 
-<Section id="ident_smtpd">
+<Section id="thirdparty_ident_smtpd">
 <Title>inetd and smtpd</Title>
 
 <Para>
@@ -502,7 +566,7 @@ as tcpserver from D. J. Bernstein's excellent
 </Para>
 </Section>
 
-<Section id="other">
+<Section id="thirdparty_other">
 <Title>Other Software</Title>
 
 <Para>
@@ -512,6 +576,140 @@ better ways of doing this than the ones I'm using above, let me know too,
 and you'll see your idea show up in here in the next release.
 </Para>
 </Section>
+</Chapter>
+
+<Chapter id="future">
+<Title>Future</Title>
+
+<Section id="future_todo">
+<Title>To Do</Title>
+
+<Para>
+There are a number of enhancements to rblcheck that are up for
+consideration, in no particular order:
+</Para>
+
+<ItemizedList>
+<ListItem><Para>
+Follow CNAMEs from rblcheck(). This will let us get at the eventual
+TXT RRs for a domain name.
+</Para></ListItem>
+
+<ListItem><Para>
+Optional support for
+<ULink url="http://www.gnu.org/software/adns/adns.html">adns</ULink>.
+</Para></ListItem>
+
+<ListItem><Para>
+Timeout option. Should default to no timeout, but apparently there is
+an issue with rblcheck hanging in an offline environment where the
+nameserver in use is located off-site. This would compensate for the
+misconfiguration, and provide a 'quick-fail' mode for people to play
+with.
+</Para></ListItem>
+
+<ListItem><Para>
+(from Aaron Schrab <EMail>aaron@schrab.com</EMail>, era eriksson
+<EMail>era@iki.fi</EMail>, and torben fjerdingstad
+<EMail>tfj@fjerdingstad.dk</EMail>) Add the ability to only list successful
+matches, and add a debug mode which outputs what is happening internally,
+and any errors received. This could be best implemented with a '-v X'
+option, where 'X' is a number between 0 and 9 (0 being silent, 4 being
+default/ordinary output, 9 displaying heavy debugging info).
+</Para></ListItem>
+</ItemizedList>
+
+<Para>
+Send ideas to <EMail>rblcheck-users@lists.sourceforge.net</EMail>.
+</Para>
+</Section>
+
+<Section id="future_nottodo">
+<Title>...or Not To Do?</Title>
+
+<Para>
+These are the features that you'll never see in the version of rblcheck
+that I produce (rblcheck is GPL; you're free to produce your own version
+if this doesn't suit you well), and the rationale behind why not. I'm
+hoping that the explainations will make sense, but I'm always open to
+criticism if you feel my logic is flawed.
+</Para>
+
+<VariableList>
+<VarListEntry>
+<Term>Support for doing lookups of FQDNs</Term>
+<ListItem><Para>
+This is a futile method of checking whether a particular system is
+blackholed; if the originating system has control of reverse DNS for
+their IP space, they can make their IP address resolve to anything
+they want, such as system.network.com. If rblcheck were to do a lookup
+on that, "system.network.com" might resolve to anything (such as
+"127.0.0.1, which will always pass with every currently known
+RBL-based blacklist). A compromise that I've considered would be
+similar to TCP Wrapper's system of multiple lookups: take the IP
+address, look up the reverse, then resolve the reverse to an IP
+address. If both lookups match, then proceed, otherwise exit with a
+failure. I'd consider integrating code from someone who implemented
+this behavior.
+</Para></ListItem>
+</VarListEntry>
+
+<VarListEntry>
+<Term>Return codes that identify a particular blacklist</Term>
+<ListItem>
+<Para>
+This took a while to convince me it was wrong. Here are the questions I went
+over when deciding against this:
+</Para>
+<ItemizedList>
+<ListItem><Para>
+What do you do with your scripts when the blacklist order changes, or new
+blacklists appear (assuming a dynamic assignment of identifiers)?
+</Para></ListItem>
+<ListItem><Para>
+If you hard-code a number for each and every blacklist, who becomes
+responsible for being a registry for those numerical identifiers? What
+happens to already-assigned values when blacklists shutdown or change
+incompatibly?
+</Para></ListItem>
+<ListItem><Para>
+How do you scale beyond 256 RBL services? With the advent of software such as
+<ULink url="http://cr.yp.to/djbdns/rbldns.html">rbldns</ULink> (a part of the
+<ULink url="http://cr.yp.to/djbdns.html">djbdns</ULink> package which allows
+anyone to host an RBL-style service), and with nearly a dozen
+<ULink url="http://www.orbs.org/">ORBS</ULink> domains alone, does this
+limitation seem reasonable?
+</Para></ListItem>
+<ListItem><Para>
+How do you report multiple matches with a return code, when the return code
+can only hold one number?
+</Para></ListItem>
+</ItemizedList>
+<Para>
+Some of these can be solved, but not cleanly; you'll need no end of special
+cases to accomodate them.
+</Para>
+</ListItem>
+</VarListEntry>
+
+<VarListEntry>
+<Term>Integrated scanning of email and similar features</Term>
+<ListItem>
+<Para>
+    This is a question of UNIX philosophy: design one tool for one task,
+    and do it well. There are plenty of far more powerful text parsing
+    tools available which are more appropriate for the job (email parsing
+    is easily handled by tools such as formail, general text parsing is
+    better suited by tools such as sed, awk, perl, python, etc), and they
+    can do a much better job than something that I could integrate into
+    rblcheck while still maintaining a small footprint.
+</Para>
+</ListItem>
+</VarListEntry>
+</VariableList>
+
+</Section>
+
 </Chapter>
 
 <Chapter id="origip">
@@ -551,8 +749,8 @@ messages, from various mailing lists and private messages, on a Linux
 <Para>
 If you're in need of assistance, a (very low volume) mailing list for
 rblcheck users has been set up; to subscribe, simply send an email to
-rblcheck-users-subscribe@lists.sourceforge.net, answer the confirmation
-email, and you'll be able to post your questions.
+<EMail>rblcheck-users-subscribe@lists.sourceforge.net</EMail>, answer the
+confirmation email, and you'll be able to post your questions.
 (<ULink url="http://www.geocrawler.com/lists/3/SourceForge/1600/0/">Archives</ULink>)
 </Para>
 
@@ -565,6 +763,117 @@ you believe you've found one.
 <Para>
 If you have a SourceForge account already, please log in before reporting
 a bug so that you can be notified of changes.
+</Para>
+</Chapter>
+
+<Chapter id="credits">
+<Title>Credits</Title>
+
+<Para>Thanks, kudos, and other good stuff go to:</Para>
+
+<Para>
+<VariableList>
+<VarListEntry>
+<Term>Paul Vixie <EMail>paul@vix.com</EMail></Term>
+<ListItem<Para>
+For the original RBL, a fantastic tool for the prevention of spam. Often
+duplicated, never repeated, and all that jazz.
+</Para></ListItem>
+</VarListEntry>
+<VarListEntry>
+<Term><ULink url="http://mail-abuse.org/">The MAPS Project</ULink></Term>
+<ListItem><Para>
+A great gathering point for protection services regarding email. Everyone
+there should be given a pat on the back for the thankless hours they put
+into maintaining an excellent resource for everyone.
+</Para></ListItem>
+</VarListEntry>
+<VarListEntry>
+<Term>Stephen R. van den Berg <EMail>srb@cuci.nl</EMail></Term>
+<ListItem><Para>
+For writing <ULink url="http://www.procmail.org/">Procmail</ULink>, a nifty
+little mail filtering tool. While certainly not the only place to use
+rblcheck, it's certainly one of the more useful.
+</Para></ListItem>
+</VarListEntry>
+<VarListEntry>
+<Term><ULink url="http://www.money-for-nothing.org/">Dire Straits</ULink></Term>
+<ListItem><Para>
+For writing good music to write code to. ;-) I wonder if spam qualifies as
+a symptom of <ULink
+url="http://gunther.simplenet.com/v/data/industri.htm">industrial
+disease</ULink>?
+</Para></ListItem>
+</VarListEntry>
+<VarListEntry>
+<Term>...and a cast of thousands:</Term>
+<ListItem><ItemizedList>
+<ListItem><Para>
+Russell Nelson <EMail>nelson@crynwr.com</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Frank Tegtmeyer <EMail>fte@iqweb.de</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Anders Eriksson <EMail>aer@cdt.luth.se</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Kevin Kadow <EMail>kadokev@ripco.com</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Ronald F. Guilmette <EMail>rfg@monkeys.com</EMail>
+</Para></ListItem>
+<ListItem><Para>
+era eriksson <EMail>era@iki.fi</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Ophir Ronen <EMail>ophir@internap.com</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Brian Willoughby <EMail>brianw@sounds.wa.com</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Jeff A. Earickson <EMail>jaearick@colby.edu</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Gerald Pfeifer <EMail>pfeifer@dbai.tuwien.ac.at</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Pat Myrto <EMail>pat@rwing.COM</EMail>
+</Para></ListItem>
+<ListItem><Para>
+William Yang <EMail>wyang@freenet.columbus.oh.us</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Dougal Campbell <EMail>dougal@advicom.net</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Jason Gunthorpe <EMail>jgg@gpu.srv.ualberta.ca</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Timothy J Luoma <EMail>luomat@peak.org</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Adam Shand <EMail>larry@alaska.net</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Andrew Kelley <EMail>kelleya@dimensional.com</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Thomas Meyer <EMail>tmeyer@ifi.unizh.ch</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Jonathan Bradshaw <EMail>jonathan@NrgUp.Com</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Jacques Distler <EMail>distler@golem.ph.utexas.edu</EMail>
+</Para></ListItem>
+<ListItem><Para>
+Harlan Stenn <EMail>Harlan.Stenn@pfcs.com</EMail>
+</Para></ListItem>
+</ItemizedList></ListItem>
+</VarListEntry>
+</VariableList>
 </Para>
 </Chapter>
 
