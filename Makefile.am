@@ -27,7 +27,6 @@ EXTRA_DIST = \
 	config/install-sh		\
 	config/missing			\
 	config/mkinstalldirs		\
-	docs/rblcheck.sgml		\
 	utils/README			\
 	utils/test_origip.sh		\
 	utils/test_rblcheck.sh		\
@@ -39,7 +38,7 @@ EXTRA_DIST = \
 	utils/sendmail/origip.pl	\
 	$(TESTS)
 
-SUBDIRS = .
+SUBDIRS = docs .
 
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.in stamp-h.in \
 	$(AUX_DIST)

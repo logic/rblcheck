@@ -11,7 +11,9 @@
    A copy of the license is included below in the SGML Appendix "fdl".
 -->
 
-<Book id="rblcheck">
+
+<!-- We call the book "index" to force db2html to produce an index.html. -->
+<Book id="index">
 
 <BookInfo>
  <Title>rblcheck</Title>

@@ -30,4 +30,4 @@ AC_CHECK_FUNC(res_query,,
 			AC_MSG_ERROR(cannot locate res_query function))))
 
 dnl All done.
-AC_OUTPUT(Makefile)
+AC_OUTPUT(Makefile docs/Makefile)

@@ -10,3 +10,6 @@ Changes since 1.4:
 
 - Updated sites.h to mesh with current reality (almost ALL of the sites
   listed had changed since the last update).
+
+- Converted documentation to docbook, with a script for automatically
+  generating html, ps, and rtf formats.
