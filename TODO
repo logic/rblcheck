@@ -1,0 +1,2 @@
+- what other platforms besides Linux require getopt.h? I know specifically
+  that Solaris doesn't.
