@@ -1,8 +1,0 @@
-#!/bin/sh
-
-# Verify that we get no return value for an unlisted address.
-
-if ! ./rblcheck -c -s inputs.orbs.org 127.0.0.1
-then
-	exit 1
-fi

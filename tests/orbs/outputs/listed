@@ -1,8 +1,0 @@
-#!/bin/sh
-
-# Verify that we get successfully poll a listed address.
-
-if ./rblcheck -c -s outputs.orbs.org 127.0.0.3
-then
-	exit 1
-fi
