@@ -110,7 +110,7 @@ int txt = 0;
 void version()
 {
 	fprintf( stderr,
-	  "%s %s, Copyright (C) 1997, 1998, 1999 Edward S. Marshall\n",
+	  "%s %s, Copyright (C) 1997, 1998, 1999, 2000, 2001 Edward S. Marshall\n",
 	  PACKAGE, VERSION );
 }
 
@@ -289,15 +289,16 @@ int full_rblcheck( char * addr )
 	char * response;
 	struct rbl * ptr;
 
-	if( sscanf( addr, "%d.%d.%d.%d", &a, &b, &c, &d ) != 4
-	  || a < 0 || a > 255 || b < 0 || b > 255 || c < 0 || c > 255
-	  || d < 0 || d > 255 )
-	{
-		fprintf( stderr, "%s is an invalid IP address\n", addr );
-		return 0;
-	}
 	for( ptr = rblsites; ptr != NULL; ptr = ptr->next )
 	{
+		if( sscanf( addr, "%d.%d.%d.%d", &a, &b, &c, &d ) != 4
+		  || a < 0 || a > 255 || b < 0 || b > 255 || c < 0 || c > 255
+		  || d < 0 || d > 255 )
+		{
+			fprintf( stderr, "%s: warning: invalid address `%s'\n",
+			  progname, addr );
+			return 0;
+		}
 		response = rblcheck( a, b, c, d, ptr->site, txt );
 		if( !quiet || response )
 			printf( "%s %s%s%s%s%s%s", addr,
@@ -329,11 +330,7 @@ int main( argc, argv )
 	int rblfiltered = 0;
 	char inbuf[ RESULT_SIZE ];
 
-	/* This is a glorious hack, but the average person should be able
-	   to deal with adding sites this way. As a bonus, you can add
-	   arbitrary code into rblcheck this way, without modifying the
-	   source directly. Not sure how incredibly useful that is, but
-	   hey, it's there. ;-) */
+/* Hack to handle the easy addition of sites at compile time. */
 #define SITE(x) rblsites = togglesite( (x), rblsites );
 #include "sites.h"
 #undef SITE
@@ -344,11 +341,11 @@ int main( argc, argv )
 		switch( a )
 		{
 			case 'q':
-				/* Quiet */
+				/* Quiet mode. */
 				quiet = 1;
 				break;
 			case 't':
-				/* Display TXT */
+				/* Display TXT record. */
 				txt = 1;
 				break;
 			case 'l':
@@ -358,9 +355,11 @@ int main( argc, argv )
 					printf( "%s\n", ptr->site );
 				return 0;
 			case 's':
+				/* Toggle a particular zone. */
 				rblsites = togglesite( optarg, rblsites );
 				break;
 			case 'c':
+				/* Clear the rbl zones. */
 				ptr = rblsites;
 				while( ptr != NULL )
 				{
@@ -384,17 +383,26 @@ int main( argc, argv )
 	/* Did they tell us to check anything? */
 	if( optind == argc )
 	{
-		fprintf( stderr, "%s: no IP address specified\n",
+		fprintf( stderr, "%s: no IP address(es) specified\n",
 		  progname );
 		usage();
 		return -1;
 	}
 
-	/* Loop through the rest of the command line, checking each IP
-	   address specified. */
+	/* Do we have any listings to search? */
+	if( !rblsites )
+	{
+		fprintf( stderr,
+		  "%s: no rbl listing(s) specified (need `-s <zone>'?)\n",
+		  progname );
+		return 0;
+	}
+
+	/* Loop through the command line. */
 	while( optind < argc )
 	{
-		if( ! strncmp( "-", argv[ optind ], 1 ) )
+		/* Handle addresses from stdin. */
+		if( argv[ optind ][ 0 ] == '-' && argv[ optind ][ 1 ] == '\0' )
 			while( fgets( inbuf, RESULT_SIZE - 1, stdin ) != NULL )
 			{
 				inbuf[ strlen( inbuf ) - 1 ] = '\0';
@@ -404,6 +412,7 @@ int main( argc, argv )
 			rblfiltered += full_rblcheck( argv[ optind ] );
 		optind++;
 	}
+
 	return rblfiltered;
 }
 
