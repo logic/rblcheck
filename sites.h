@@ -49,7 +49,7 @@
 /* SITE("3y.spam.mrs.kithrup.com") */
 
 /* ORBS: Open Relay Behaviour-modification System
-   http://www.orbs.org/
+   http://www.orbs.org/ */
 /* SITE("inputs.orbs.org") */
 /* SITE("outputs.orbs.org") */
 /* SITE("delayed-outputs.orbs.org") */
