@@ -1,0 +1,34 @@
+This is a placeholder for an older file which is still referenced from
+the README files all over the place.
+
+A transition to SGML-based documentation is under way. Refer to the
+file rlbcheck.sgml in this directory.
+
+The installation instructions for this test release differ from what
+is in the SGML file, though. What follows is a brief stopgap-type
+installation manual, which assumes you are vaguely familiar with
+Autoconf and related systems (experience with installing standard GNU
+tools should suffice).
+
+ 0. Disregard any mention of docs/INSTALL and ./configure in the
+    "real" instructions for the time being.
+
+ 1. In the root directory, run autoconf.
+
+    If you don't have autoconf on your system, see if you can fake it
+    with config/missing
+
+ 2. If you like, edit sites.h.
+
+    In particular, you may wish to uncomment ORBS and/or other popular
+    services which are commented out by default.
+
+ 3. Now, you can proceed to follow the instructions in ./INSTALL
+
+    To wit, run ./configure with the options you like, then make, then
+    make install.
+
+If you run into any trouble, please file a bug report. This software
+is provided in this state in the hope that it will be useful, but we
+think it would be more useful still if any problems are reported back
+to the authors. Thanks for contributing!
