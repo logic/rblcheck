@@ -3,8 +3,11 @@
 # $Id$
 #
 # $Log$
-# Revision 1.3  2000/04/21 15:22:48  logic
-# Update to version 1.3.
+# Revision 1.4  2000/04/21 15:22:51  logic
+# Update to version 1.4.
+#
+# Revision 1.7  1998/08/20 05:47:03  emarshal
+# Some final cleanups. Bumped version to 1.4.
 #
 # Revision 1.6  1998/08/15 22:27:27  emarshal
 # Fixed some formatting issues with combinations of -q and -t.
@@ -35,7 +38,7 @@ PREFIX=/usr/local/bin
 # need this. Alternatively, it might be called "libbind" on your
 # system.
 #LDLIBS=-lresolv
-LDLIBS=-lbind
+#LDLIBS=-lbind
 
 # Generic GCC. This is probably your best bet on most systems, but see
 # below for an entry for your system.

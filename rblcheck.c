@@ -1,5 +1,5 @@
 /*
-** rblcheck 1.3 - Command-line interface to Paul Vixie's RBL filter.
+** rblcheck 1.4 - Command-line interface to Paul Vixie's RBL filter.
 ** Copyright (C) 1997, Edward S. Marshall <emarshal@logic.net>
 **
 ** This program is free software; you can redistribute it and/or modify
@@ -21,8 +21,23 @@
 ** Revision history:
 **
 ** $Log$
-** Revision 1.3  2000/04/21 15:22:48  logic
-** Update to version 1.3.
+** Revision 1.4  2000/04/21 15:22:51  logic
+** Update to version 1.4.
+**
+** Revision 1.13  1998/08/20 05:47:03  emarshal
+** Some final cleanups. Bumped version to 1.4.
+**
+** Revision 1.12  1998/08/20 05:32:07  emarshal
+** Dynamically allocate the res_query() buffer, to ensure we get all we
+** asked for. This makes the assumption that res_query() returns the real
+** size of the packet; Paul Vixie and other BIND maintainers have confirmed
+** this, so it should be safe (even if it's undocumented).
+**
+** Revision 1.11  1998/08/20 05:10:28  emarshal
+** Fixed error with rblcheck return values, pointed out by Thomas Meyer.
+**
+** Revision 1.10  1998/08/20 04:58:31  emarshal
+** Added a fix for systems where T_TXT isn't defined (like SunOS 4.x).
 **
 ** Revision 1.9  1998/08/15 22:27:27  emarshal
 ** Fixed some formatting issues with combinations of -q and -t.
@@ -70,13 +85,12 @@
 #include <resolv.h>
 #include <netdb.h>
 
-#define VERSION "1.3"
+#define VERSION "1.4"
 
 #define RESULT_SIZE 4096 /* What is the longest result text we support? */
 
 /* Simple linked list to hold the sites we support. See below to see how
-   to change the default list of servers. By default, we only support
-   the original Paul Vixie RBL. */
+   to change the default list of servers. */
 struct rbl
 {
 	char * site;
@@ -108,6 +122,14 @@ struct rbl
 	    ; \
 	(cp) += NS_INT16SZ; \
 }
+#endif
+
+#ifndef T_TXT
+#define T_TXT 16
+#endif
+
+#ifndef PACKETSZ
+#define PACKETSZ 512
 #endif
 
 /* This might actually be needed on other platforms. */
@@ -188,11 +210,13 @@ char * rblcheck( int a, int b, int c, int d, char * rbldomain, int txt )
 {
 	char * domain;
 	char * result = NULL;
-	u_char answer[ PACKETSZ ];
+	u_char fixedans[ PACKETSZ ];
+	u_char * answer;
 	const u_char * cp;
 	u_char * rp;
 	const u_char * cend;
 	const u_char * rend;
+	int len;
 
 	/* 16 characters max in a dotted-quad address, plus 1 for null */
 	domain = ( char * )malloc( 17 + strlen( rbldomain ) );
@@ -202,12 +226,19 @@ char * rblcheck( int a, int b, int c, int d, char * rbldomain, int txt )
 
 	/* Make our DNS query. */
 	res_init();
-	res_query( domain, C_IN, T_A, answer, PACKETSZ );
+	answer = fixedans;
+	len = res_query( domain, C_IN, T_A, answer, PACKETSZ );
 
 	/* Was there a problem? If so, the domain doesn't exist. */
-	if( h_errno != 0 )
-	{
+	if( len == -1 )
 		return result;
+
+	if( len > PACKETSZ )
+	{
+		answer = malloc( len );
+		len = res_query( domain, C_IN, T_A, answer, len );
+		if( len == -1 )
+			return result;
 	}
 
 	result = ( char * )malloc( RESULT_SIZE );
@@ -289,7 +320,7 @@ int main( argc, argv )
 	struct rbl * ptr;
 
 	/* Add more sites you want in the default list of RBL-alike
-	   systems here. */
+	   systems here. ### An easier way to change this is needed. ### */
 	rblsites = togglesite( "rbl.maps.vix.com", rblsites );
 	rblsites = togglesite( "rbl.dorkslayers.com", rblsites );
 
@@ -361,7 +392,7 @@ int main( argc, argv )
 		  txt && response && strlen( response ) && !quiet ? ": " : "",
 		  txt && response ? response : "",
 		  quiet && ( !txt || !strlen( response ) ) ? "" : "\n" );
-		if( !quiet && !response )
+		if( response )
 			rblfiltered++;
 		free( response );
 	}

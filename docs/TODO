@@ -1,4 +1,9 @@
 - convert to using autoconf to help with portability issues, and redo the
   Makefile to take full advantage of it.
 
+- global config file for rblcheck, that contains all known RBL­alike
+  DNS schemes. Will this invoke more overhead than this program should
+  require, especially since the lists of sites will be static for the
+  most part? Comments welcome.
+
 Send ideas to "emarshal@logic.net".
