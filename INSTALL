@@ -1,0 +1,110 @@
+rblcheck 1.0 - Command-line interface to Paul Vixie's RBL filter.
+Copyright (C) 1997, Edward S. Marshall <emarshal@logic.net>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+-- Compiling:
+
+To compile rblcheck, simple edit the file "Makefile" to tastes; the
+defaults are for gcc, but this program should compile happily on other
+compilers. When you are satisfied with your compiler settings in Makefile,
+type "make" and the program will try to compile. On some systems, you'll
+need to add "-lresolv" to LDFLAGS (Solaris, for example).
+
+The program has only one command line option: "-q". Specifying it will
+suppress output. The program returns an exit code of 1 for a match in the
+filter, and 0 for no match (in other words, if 0 is returned, the address
+is a poor choice to receive email from, in the opinion of the MAPS
+project).
+
+To verify that the program is working after you've compiled it, try the
+following test:
+
+	% rblcheck 127.0.0.2
+	RBL filtered
+	% rblcheck 127.0.0.1
+	not RBL filtered
+
+If you get any other result from those two checks, then something has
+gone terribly wrong, and you should email me with what happens. If it
+works, go ahead and use it in good health, knowing that you've made
+your world a better place to be. Well, ok, how about knowing that you
+won't be getting nearly as much spam as you currently are? :-)
+
+
+-- Using rblcheck with QMail and Procmail:
+
+The best use I've found for this little tool is for use in a procmail rule
+running under QMail. QMail (or rather, tcp-env) provides a set of
+environment variables to invoked processes, such as procmail, which give
+you a great deal of information about the connecting host.
+
+Once such environment variable is TCPREMOTEIP. This variable contains the
+IP address of the connecting host. Paul Vixie's RBL filter depends on
+having this information available for a DNS lookup (every host in the
+filter resolves to 127.0.0.2).
+
+So, the following procmail rule will handle everything you need:
+
+:0
+* ? rblcheck -q $TCPREMOTEIP
+{
+	EXITCODE=100
+	LOGABSTRACT=all
+	LOG="Filter: address \"$TCPREMOTEIP\" is RBL-filtered
+"
+	:0:
+	$FILTERFOLDER
+}
+
+where "FILTERFOLDER" has been set up ahead of time as the place to put
+email that you don't want to see (either another incoming folder,
+/dev/null, or a 'formail' invokation that rewrites the message and tacks
+on an extra header or munges the subject so you can easily identify it.
+
+
+-- Using rblcheck with Sendmail and Procmail:
+
+This isn't quite as easy, and the solution I propose here will only work
+if you have direct control over your sendmail installation. If you're an
+ordinary user, this will not work. If you have another way of doing this
+with Sendmail that doesn't involve the (fairly useful)  change below, let
+me know.
+
+Currently, in your sendmail.cf file, you'll probably something like:
+
+Mprog,	P=/bin/sh, F=lsDFMoeu, S=10/30, R=20/40, D=$z:/,
+	T=X-Unix,
+	A=sh -c $u
+
+This is the local delivery rule used to execute .forward scripts.  Your
+system might use something like "rsh" or another restricted shell instead
+of "sh" for running programs. Don't let that scare you.
+
+Change the above lines to look like:
+
+Mprog,	P=/usr/bin/env, F=lsDFMoeu, S=10/30, R=20/40, D=$z:/,
+	T=X-Unix,
+	A=env TCPREMOTEIP="${client_addr}" sh -c $u
+
+This will give you the same environment variable that tcp-env under QMail
+gives you, and you'll be able to use the same steps that the QMail
+installation suggests.
+
+
+-- Other mailers/other filter packages:
+
+Don't ask me. If you figure out a way to make this work under another
+setup, let me know how you did it, and I'll add it here.
