@@ -1,4 +1,4 @@
-rblcheck 1.2 - Command-line interface to Paul Vixie's RBL filter.
+rblcheck 1.3 - Command-line interface to Paul Vixie's RBL filter.
 Copyright (C) 1997, Edward S. Marshall <emarshal@logic.net>
 
 This program is free software; you can redistribute it and/or modify
@@ -21,21 +21,46 @@ To compile rblcheck, simple edit the file "Makefile" to tastes; the
 defaults are for gcc, but this program should compile happily on other
 compilers. When you are satisfied with your compiler settings in Makefile,
 type "make" and the program will try to compile. On some systems, you'll
-need to add "-lresolv" to LDFLAGS (Solaris, for example).
+need to add "-lresolv" to LDLIBS (Solaris, for example).
 
-The program has only one command line option: "-q". Specifying it will
-suppress output. The program returns an exit code of 1 for a match in the
-filter, and 0 for no match (in other words, if 0 is returned, the address
-is a poor choice to receive email from, in the opinion of the MAPS
-project).
+When invoked, rblcheck returns either -1 (for serious failure), 0 (to
+indicate that the IP address is not filtered by any of the RBL-alike
+services), or a positive number (indicating the number of filters that the
+IP address is filtered by).
+
+The program has several command line options:
+
+-q      Be quiet about whether the IP address matched the filter or not.
+        Handy for automatic processing scripts which just check the return
+        code of rblcheck.
+
+-t      Display, if available, a textual description of why the site was
+        originally placed in a particular filter.
+
+-l      List the currently defined RBL filters. By default, rblcheck will
+        check "rbl.maps.vix.com" and "rbl.dorkslayers.com". You can change
+        these defaults easily by editing rblcheck.c and changing the lines
+        in main() which call togglesite().
+
+-c      Clear the list of defined RBL filters. This is handy if you don't
+        know what default filters might be defined on a system, and wish
+        to hand-pick your list of filters.
+
+-s <service> Add a new service to the list of defined RBL filters.
+
+-h, -?  Get help about rblcheck.
+
+-v      Display the version of rblcheck.
 
 To verify that the program is working after you've compiled it, try the
 following test:
 
 	% rblcheck 127.0.0.2
-	RBL filtered
+	RBL filtered by rbl.maps.vix.com
+        RBL filtered by rbl.dorkslayers.com
 	% rblcheck 127.0.0.1
-	not RBL filtered
+	not RBL filtered by rbl.maps.vix.com
+        not RBL filtered by rbl.dorkslayers.com
 
 If you get any other result from those two checks, then something has
 gone terribly wrong, and you should email me with what happens. If it
@@ -72,6 +97,11 @@ to look up the IP address in the MAPS RBL filter:
 to put email that you don't want to see (either another incoming folder,
 /dev/null, or a 'formail' invokation that rewrites the message and tacks
 on an extra header or munges the subject so you can easily identify it.
+
+Note that the EXITCODE variable above is for QMail, and indicates a
+permanent error. Under Sendmail, 77 is more appropriate. Under anything
+else, it's hard to say; your best bet is to refer to the documentation
+regarding execution of programs.
 
 One more thing: procmail has a nasty habit of munging the environment,
 but most MTAs already do this for you. Hence, you should add the '-p'
@@ -254,5 +284,5 @@ With origip.c:
 10 seconds faster, 3 seconds less system time used, 5 seconds less user
 time, and over 30,000 less page faults. In other words: a LOT easier on
 the box you'll be running this on. This test was run on a little under 600
-messages, from various mailing lists and private messages on a Linux
+messages, from various mailing lists and private messages, on a Linux
 2.0.31 system.

@@ -3,8 +3,15 @@
 # $Id$
 #
 # $Log$
-# Revision 1.2  2000/04/21 15:22:46  logic
-# Update to version 1.2.
+# Revision 1.3  2000/04/21 15:22:48  logic
+# Update to version 1.3.
+#
+# Revision 1.6  1998/08/15 22:27:27  emarshal
+# Fixed some formatting issues with combinations of -q and -t.
+#
+# Revision 1.5  1998/08/15 22:09:34  emarshal
+# Many changes, most involving support for multiple RBL-alike services.
+# Bumped revision to 1.3.
 #
 # Revision 1.4  1998/01/28 22:11:31  emarshal
 # More portability stuff, and upgrade to version 1.2.
@@ -20,11 +27,15 @@
 # Initial import into CVS.
 #
 
+# Where do you want to install rblcheck?
+PREFIX=/usr/local/bin
+
 # Do you need the resolver library? If you get some errors about
 # missing symbols, uncomment this. Linux/glibc and Solaris definitely
-# need this.
-#RESOLV=-lresolv
-
+# need this. Alternatively, it might be called "libbind" on your
+# system.
+#LDLIBS=-lresolv
+LDLIBS=-lbind
 
 # Generic GCC. This is probably your best bet on most systems, but see
 # below for an entry for your system.
@@ -40,17 +51,19 @@ LDFLAGS=-s
 # SunOS w/Sun cc
 #CC=cc
 #CFLAGS=-O
-#LDFLAGS=$(LDFLAGS) -n -Bdynamic
+#LDFLAGS=-n -Bdynamic
 
 # HP 10.x
 #CC=cc
 #CFLAGS=-O -Ae -D_XOPEN_SOURCE_EXTENDED
 #LDFLAGS=-s
 
-
-LDFLAGS += $(RESOLV)
-
 all: rblcheck
+
+install:
+	-[ -f ${PREFIX}/rblcheck ] && \
+		mv ${PREFIX}/rblcheck ${PREFIX}/rblcheck.old
+	-cp rblcheck ${PREFIX}
 
 clean:
 	-rm rblcheck

@@ -1,12 +1,15 @@
 -- GENERAL THANKS:
 
-Paul Vixie <paul@vix.com>: For the RBL itself, a fantastic tool for the
-	prevention of spam.
+Paul Vixie <paul@vix.com>: For the original RBL, a fantastic tool for
+	the prevention of spam.
 
 The MAPS project <URL:http://maps.vix.com/>: A great gathering point for
 	protection services regarding email. Everyone there should be
 	given a pat on the back for the thankless hours they put into
 	maintaining an excellent resource for everyone.
+
+Dorkslayers.com <URL:http://www.dorkslayer.com>: Another good RBL-alike
+	system, which focuses singularly on open email relays.
 
 Stephen R. van den Berg <srb@cuci.nl>: For writing Procmail, a nifty
 	little mail filtering tool. While certainly not the only place
@@ -27,17 +30,27 @@ Anders Eriksson <aer@cdt.luth.se>: Pointed out that I failed to provide
 Kevin Kadow <kadokev@ripco.com>: suggested a novel use for rblcheck as
 	a means of rejecting email via inetd.
 
+Ronald F. Guilmette <rfg@monkeys.com>: noted how silly it was to send
+	useful output to stderr, and suggested a "make install" target.
+
 -- CODE PEOPLE:
 
 Ophir Ronen <ophir@internap.com>: supplied the origip.pl script which
 	pulls the remote IP address from Sendmail Received: headers.
 
-Brian Willoughby <brianw@sounds.wa.com>: Supplied patches for NeXT.
+Brian Willoughby <brianw@sounds.wa.com>: supplied patches for NeXT.
 
-Gerald Pfeifer <pfeifer@dbai.tuwien.ac.at>: Supplied patches for version
+Jeff A. Earickson <jaearick@colby.edu>: supplied patches for HP-UX.
+
+Gerald Pfeifer <pfeifer@dbai.tuwien.ac.at>: supplied patches for version
 	output.
+
+Pat Myrto <pat@rwing.COM>: supplied patches for SunOS.
+
+William Yang <wyang@freenet.columbus.oh.us>: supplied early patches for
+	supporting multiple RBL-alike services.
 
 -- BUG PEOPLE:
 
-Pat Myrto <pat@rwing.COM>
+Timothy J Luoma <luomat@peak.org>
 Adam Shand <larry@alaska.net>

@@ -1,1 +1,4 @@
-Hopefully nothing. Send ideas to "emarshal@logic.net".
+- convert to using autoconf to help with portability issues, and redo the
+  Makefile to take full advantage of it.
+
+Send ideas to "emarshal@logic.net".

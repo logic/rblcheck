@@ -1,3 +1,23 @@
+Changes since 1.2:
+
+- New feature: the ability to query multiple RBL-alike services in
+  one invokation.
+
+- New command-line option: -l (list known RBL services)
+
+- New command-line option: -s <service> (toggle an RBL service)
+
+- New command-line option: -c (clear the list of RBL services)
+
+- Compat-buster: formatting of the output has changed slightly, to
+  accomodate multiple RBL services. The new output includes the name
+  of the server currently being checked (ie. "RBL filtered by ..."),
+  and there can be multiple outputs of "(not) RBL filtered by ...".
+
+- Added a very basic "install" target to the Makefile.
+
+- Some generalization of the code.
+
 Changes since 1.1:
 
 - a bunch of portability fixes, plus some minor code cleanup to make
