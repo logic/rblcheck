@@ -10,9 +10,7 @@ rblcheck_SOURCES = rblcheck.c
 
 bin_SCRIPTS = rbl
 
-XFAIL_TESTS = \
-	tests/maps/rbl/listed tests/maps/rbl/unlisted \
-	tests/maps/rss/listed tests/maps/rss/unlisted
+XFAIL_TESTS =
 TESTS = tests/clearlist tests/addlisting tests/removelisting $(XFAIL_TESTS)
 
 # We don't include README.ALPHA or bootstrap here, so we don't include them
