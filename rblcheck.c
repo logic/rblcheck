@@ -102,6 +102,7 @@ const char * progname;
 /* Global options. */
 int quiet = 0;
 int txt = 0;
+int firstmatch = 0;
 
 /*-- FUNCTIONS --------------------------------------------------------------*/
 
@@ -122,6 +123,7 @@ void usage()
 	fprintf( stderr, "Usage: %s [-qtlcvh?] [-s <service>] <address>\n\n\
     -q           Quiet mode; no output\n\
     -t           Print a TXT record, if any\n\
+    -m           Stop checking after first address match in any list\n\
     -l           List default RBL services to check\n\
     -c           Clear the current list of RBL services\n\
     -s <service> Add a new service to the RBL services list\n\
@@ -315,6 +317,8 @@ int full_rblcheck( char * addr )
 			count++;
 			free( response );
 		}
+		if( firstmatch && count )
+			return count;
 	}
 	return count;
 }
@@ -337,7 +341,7 @@ int main( argc, argv )
 
 	progname = argv[ 0 ];
 
-	while( ( a = getopt( argc, argv, "qtls:c?hv" ) ) != EOF )
+	while( ( a = getopt( argc, argv, "qtlms:c?hv" ) ) != EOF )
 		switch( a )
 		{
 			case 'q':
@@ -347,6 +351,10 @@ int main( argc, argv )
 			case 't':
 				/* Display TXT record. */
 				txt = 1;
+				break;
+			case 'm':
+				/* Stop after first successful match. */
+				firstmatch = 1;
 				break;
 			case 'l':
 				/* Display supported RBL systems. */
@@ -407,9 +415,13 @@ int main( argc, argv )
 			{
 				inbuf[ strlen( inbuf ) - 1 ] = '\0';
 				rblfiltered += full_rblcheck( inbuf );
+				if( firstmatch && rblfiltered )
+					return rblfiltered;
 			}
 		else
 			rblfiltered += full_rblcheck( argv[ optind ] );
+		if( firstmatch && rblfiltered )
+			return rblfiltered;
 		optind++;
 	}
 

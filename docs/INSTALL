@@ -44,6 +44,9 @@ The program has several command line options:
 -t      Display, if available, a textual description of why the site was
         originally placed in a particular listing.
 
+-m      Stop checking listings after the first successful match of any IP
+        address against any listing.
+
 -l      List the currently defined RBL listings. By default, rblcheck has
         no pre-defined listings; you can change this behavior by editing
         the file "sites.h" as described above in "Building".

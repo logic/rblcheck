@@ -3,10 +3,6 @@
 
 - optional support for adns (http://www.gnu.org/software/adns/adns.html).
 
-- an option to "exit on first match", so that after the first failure,
-  further checks are skipped, speeding up rejection if there is no
-  interest in the specifics of the results.
-
 - timeout option. Should default to no timeout, but apparently there is
   an issue with rblcheck hanging in an offline environment where the
   nameserver in use is located off-site. This would compensate for the
