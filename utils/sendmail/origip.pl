@@ -2,11 +2,14 @@
 
 # Specifically for pulling the remote IP address out of Sendmail
 # Received: headers. Supplied by Ophir Ronen <ophir@internap.com>,
-# ever-so-slightly modified by Edward S. Marshall <emarshal@logic.net>.
+# ever-so-slightly modified by Edward S. Marshall <esm@logic.net>.
 #
 # $Id$
 #
 # $Log$
+# Revision 1.7  2001/02/13 23:18:53  logic
+# Updated my email address and added the new URL for the rblcheck home page.
+#
 # Revision 1.6  2000/04/21 15:22:57  logic
 # Update to current cvs tree.
 #

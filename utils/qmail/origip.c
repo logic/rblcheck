@@ -1,6 +1,6 @@
 /*
 ** origip - Obtain the sending IP address from email Received: lines.
-** Copyright (C) 1997, Edward S. Marshall <emarshal@logic.net>
+** Copyright (C) 1997, Edward S. Marshall <esm@logic.net>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -38,6 +38,9 @@
 ** $Id$
 **
 ** $Log$
+** Revision 1.7  2001/02/13 23:18:53  logic
+** Updated my email address and added the new URL for the rblcheck home page.
+**
 ** Revision 1.6  2000/04/21 15:22:57  logic
 ** Update to current cvs tree.
 **
