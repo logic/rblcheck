@@ -131,7 +131,7 @@ void usage()
     -h, -?       Display this help message\n\
     -v           Display version information\n\
     <address>    An IP address to look up; specify `-' to read multiple\n\
-                 addresses from standard input.", progname );
+                 addresses from standard input.\n", progname );
 }
 
 /* togglesite()
