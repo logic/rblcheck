@@ -1,0 +1,12 @@
+PKG="@NAME@"
+NAME="@NAME@"
+VERSION="@VERSION@"
+ARCH="sparc"
+CATEGORY="system"
+DESC="A command-line interface to rbl-style services."
+VENDOR="http://rblcheck.sourceforge.net/"
+EMAIL="rblcheck-users@lists.sourceforge.net"
+ISTATES="S s 1 2 3"
+RSTATES="S s 1 2 3"
+BASEDIR="/"
+PSTAMP=20010403

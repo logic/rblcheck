@@ -24,11 +24,12 @@ TESTS = tests/clearlist tests/addlisting tests/removelisting $(XFAIL_TESTS)
 # in a "make distcheck". Since all tests are shell scripts, we're including
 # the full list verbatim.
 EXTRA_DIST = \
-	rblcheck.spec			\
-	rblcheck.spec.in		\
 	config/install-sh		\
 	config/missing			\
 	config/mkinstalldirs		\
+	config/rblcheck.spec		\
+	config/rblcheck.spec.in		\
+	config/pkginfo.in		\
 	utils/README			\
 	utils/test_origip.sh		\
 	utils/test_rblcheck.sh		\
@@ -45,6 +46,20 @@ SUBDIRS = docs .
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.in stamp-h.in \
 	$(AUX_DIST)
 
-DISTCLEANFILES = rblcheck.spec
+DISTCLEANFILES = config/rblcheck.spec config/pkginfo
+
+CLEANFILES = config/Prototype
 
 ACLOCAL = aclocal -I $(auxdir)
+
+# Build a Solaris package.
+solarispkg: $(bin_PROGRAMS)
+	test -x /usr/bin/pkgproto
+	test -x /usr/bin/pkgmk
+	$(MAKE) DESTDIR=`pwd`/$(distdir) install
+	echo 'i configinfo' > config/Prototype
+	pkgproto $(distdir)/usr \
+		| sed -e "s, $(distdir), ," >> config/Prototype
+	pkgmk -d config -f config/Prototype -r $(distdir)
+	pkgtrans config $(distdir).pkg rblcheck
+	rm -rf $(distdir) config/rblcheck
