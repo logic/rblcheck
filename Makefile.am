@@ -5,11 +5,10 @@ AUTOMAKE_OPTIONS = 1.4
 SUBDIRS = .
 
 bin_PROGRAMS = rblcheck
-rblcheck_SOURCES = rblcheck.c
+rblcheck_SOURCES = rblcheck.c sites.h
 
 EXTRA_DIST = \
 	README.ALPHA			\
-	sites.h				\
 	config/install-sh		\
 	config/missing			\
 	config/mkinstalldirs		\
