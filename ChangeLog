@@ -8,8 +8,8 @@ Changes since 1.4:
 - Added support for reading addresses to check from standard input, by
   specifying an argument of '-'.
 
-- Changed rbl.dorkslayers.com to relays.orbs.org, due to a change in
-  management.
+- Updated sites.h to mesh with current reality (almost ALL of the sites
+  listed had changed since the last update).
 
 Changes since 1.3:
 
