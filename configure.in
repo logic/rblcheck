@@ -19,15 +19,12 @@ AC_CHECK_HEADERS(libc.h)
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
-dnl Figure out where to get res_query from. First, see if it's in the
-dnl C library (Linux, and probably a few others). Then, check libbind
-dnl (generally, if you've installed bind 8, you're going to want to use
-dnl the new library). Finally, check for libresolv (which should exist
-dnl on most systems).
+dnl Figure out where to get res_query from.
 AC_CHECK_FUNC(res_query,,
-	AC_CHECK_LIB(resolv,res_query,,
-		AC_CHECK_LIB(bind,res_query,,
-			AC_MSG_ERROR(cannot locate res_query function))))
+  AC_CHECK_LIB(bind,res_query,,
+    AC_CHECK_LIB(resolv,res_query,,
+      AC_CHECK_LIB(minires -liphlpapi,__res_query,,
+        AC_MSG_ERROR(cannot locate res_query function)))))
 
 dnl All done.
 AC_OUTPUT(Makefile docs/Makefile config/rblcheck.spec config/pkginfo)
