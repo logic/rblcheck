@@ -212,10 +212,11 @@ tools, and none of these instructions apply to you. Please see
 
 <Para>
 I highly recommend leaving everything commented out
-in <Filename>sites.h</Filename>; this was really only added as a convenience
-mechanism for personal builds, not for a distributor to
-<Emphasis>help</Emphasis> the user set policy. Your users may be smarter
-than you think; let them make up their own mind.
+in <Filename>sites.h</Filename>; this was only added as a convenience for
+personal builds, and was never intended to be used to set policy for users.
+If you really must do so, may I suggest adding the necessary items to a
+global <Filename>rblcheckrc</Filename> for use with the
+<Application>rbl</Application> script?
 </Para>
 </Section>
 </Chapter>
@@ -223,11 +224,8 @@ than you think; let them make up their own mind.
 <Chapter id="using">
 <Title>Using</Title>
 
-<Para>
-When invoked, rblcheck returns either 0 (to indicated error, or that the
-address was not in any of the listings), or a positive number (indicating
-the number of listings that the IP address was found in).
-</Para>
+<Section id="using_rblcheck">
+<Title>rblcheck basics</Title>
 
 <Para>
 The program has several command line options:
@@ -293,27 +291,74 @@ Display the version of rblcheck.
 </InformalTable>
 
 <Para>
-To verify that the program is working after you've compiled it, try the
-following test:
-</Para>
-
-<Screen>$ ./rblcheck -s blackholes.mail-abuse.org 127.0.0.1
-127.0.0.1 not RBL filtered by blackholes.mail-abuse.org
-$ ./rblcheck -s blackholes.mail-abuse.org 127.0.0.2
-127.0.0.2 RBL filtered by blackholes.mail-abuse.org</Screen>
-
-<Para>
-If you see any other result than the above, then something has gone wrong;
-please see below about reporting bugs and finding help.
-</Para>
-
-<Para>
 You can check multiple addresses at once, to make life a little easier
 with scripts; just add additional addresses on the command line after all
 of the options. By specifying an address of "-", rblcheck will read from
 stdin and perform a lookup on every line of input (if it is a valid IP
 address).
 </Para>
+</Section>
+
+<Section id="using_returncodes">
+<Title>Return codes</Title>
+
+<Para>
+When invoked, rblcheck returns either 0 (to indicated error, or that the
+address was not in any of the listings), or a positive number (indicating
+the number of listings that the IP address was found in).
+</Para>
+</Section>
+
+<Section id="using_verification">
+<Title>Verifying your installation</Title>
+
+<Para>
+To verify that the program is working after you've compiled it, try the
+following test:
+</Para>
+
+<Screen>$ ./rblcheck -s relays.ordb.org 127.0.0.1
+127.0.0.1 not RBL filtered by relays.ordb.org
+$ ./rblcheck -s relays.ordb.org 127.0.0.2
+127.0.0.2 RBL filtered by relays.ordb.org</Screen>
+
+<Para>
+If you see any other result than the above, then something has gone wrong;
+please see below about reporting bugs and finding help.
+</Para>
+</Section>
+
+<Section id="using_rbl">
+<Title>The rbl wrapper</Title>
+
+<Para>
+A recent addition to the rblcheck package is the <Application>rbl</Application>
+shell script, which is a simple wrapper around rblcheck, with one special
+feature: it will read a global <Filename>rblcheckrc</Filename> (usually
+in <Filename>/etc</Filename> or <Filename>/usr/etc</Filename>), and then
+a <Filename>.rblcheckrc</Filename> from the current user's home directory.
+These files can contain any of the usual <Application>rblcheck</Application>
+command-line arguments (see <XRef linkend="using_rblcheck">), but are most
+useful for setting the most common RBL-style listings you use day-to-day.
+</Para>
+
+<Para>
+For example, your personal <Filename>.rblcheckrc</Filename> might contain:
+</Para>
+
+<Screen>-t
+-m
+-c
+-s relays.ordb.org
+-s some.future.rbl.listing</Screen>
+
+<Para>
+Please note that for mail filtering, or any performance-sensitive use, you
+should use <Application>rblcheck</Application> directly, to avoid adding
+additional latency to the process. <Application>rbl</Application> is
+mainly intended as a convenience tool for interactive use.
+</Para>
+</Section>
 </Chapter>
 
 <Chapter id="thirdparty">
