@@ -22,9 +22,9 @@ wish to check against (to un-comment a listing, remove the /* and */
 around the SITE(...) line).
 
 To compile rblcheck, just type "./configure" in the main directory,
-followed by "make" when the first command is complete. For more details
-on how the "configure" command works, please see the file "INSTALL" in
-the main directory.
+followed by "make" when the first command is complete. For more details on
+how the "configure" command works, please see the file "INSTALL" in the
+main directory.
 
 Note to developers: if you see a script called "bootstrap" in the main
 directory, then you are using a development release, and you will need a
@@ -36,8 +36,8 @@ script mentioned above.
 
 Note to distributors: I highly recommend leaving everything commented out
 in sites.h; this was really only added as a convenience mechanism for
-personal builds, not for a distributor to "help" the user set policy.
-Your users may be smarter than you think; let them make up their own mind.
+personal builds, not for a distributor to "help" the user set policy. Your
+users may be smarter than you think; let them make up their own mind.
 
 -- Using:
 
@@ -82,10 +82,11 @@ following test:
 If you see any other result than the above, then something has gone wrong;  
 please see below about reporting bugs and finding help.
 
-You can check multiple addresses at once, to make life a little easier with
-scripts; just add additional addresses on the command line after all of the
-options. By specifying an address of "-", rblcheck will read from stdin and
-perform a lookup on every line of input (if it is a valid IP address).
+You can check multiple addresses at once, to make life a little easier
+with scripts; just add additional addresses on the command line after all
+of the options. By specifying an address of "-", rblcheck will read from
+stdin and perform a lookup on every line of input (if it is a valid IP
+address).
 
 -- Using rblcheck with Procmail:
 
@@ -121,11 +122,11 @@ permanent error. Under Sendmail, 77 is more appropriate. Under anything
 else, it's hard to say; your best bet is to refer to the documentation
 regarding execution of programs.
 
-One more thing: procmail has a nasty habit of munging the environment,
-but most MTAs already do this for you. Hence, you should add the '-p'
-flag to the invokation of procmail (either from a local delivery rule in
-Sendmail, or from a .forward or .qmail file). This will ensure that
-procmail doesn't clean out the TCPREMOTEIP variable.
+One more thing: procmail has a nasty habit of munging the environment, but
+most MTAs already do this for you. Hence, you should add the '-p' flag to
+the invokation of procmail (either from a local delivery rule in Sendmail,
+or from a .forward or .qmail file). This will ensure that procmail doesn't
+clean out the TCPREMOTEIP variable.
 
 To test the procmail recipe:
 
@@ -270,8 +271,8 @@ smtpd: ALL: spawn /usr/local/bin/rblcheck -q %a && \
 	"469 Connection refused. See http://maps.vix.com/rbl/\r\b\r\n"
 
 This gives you RBL support on a site-wide basis, even if native support
-doesn't yet exist for your MTA of choice. This assumes that your inetd has 
-support for tcp_wrappers checks; many Linux variants fall into this 
+doesn't yet exist for your MTA of choice. This assumes that your inetd has
+support for tcp_wrappers checks; many Linux variants fall into this
 category, but other platforms may differ.
 
 A word of warning, however: there are a number of very good reasons to not
@@ -320,10 +321,10 @@ mailing list are available at:
 
         http://www.geocrawler.com/lists/3/SourceForge/1600/0/
 
-All software has bugs, and rblcheck has a place for you to report them if 
+All software has bugs, and rblcheck has a place for you to report them if
 you believe you've found one; please visit:
 
         http://sourceforge.net/bugs/?group_id=2081
 
-If you have a SourceForge account already, please log in before reporting 
+If you have a SourceForge account already, please log in before reporting
 a bug so that you can be notified of changes.
