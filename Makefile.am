@@ -20,17 +20,14 @@ XFAIL_TESTS = \
 	tests/orbs/spamsource-netblocks/listed tests/orbs/spamsource-netblocks/unlisted
 TESTS = tests/clearlist tests/addlisting tests/removelisting $(XFAIL_TESTS)
 
+# We don't include README.ALPHA or bootstrap here, so we don't include them
+# in a "make distcheck". Since all tests are shell scripts, we're including
+# the full list verbatim.
 EXTRA_DIST = \
-	README.ALPHA			\
 	config/install-sh		\
 	config/missing			\
 	config/mkinstalldirs		\
-	docs/BUGS			\
-	docs/CREDITS			\
-	docs/INSTALL			\
-	docs/NOT-TODO			\
-	docs/PLATFORMS			\
-	docs/TODO			\
+	docs/rblcheck.sgml		\
 	utils/README			\
 	utils/test_origip.sh		\
 	utils/test_rblcheck.sh		\
@@ -39,7 +36,8 @@ EXTRA_DIST = \
 	utils/qmail/Makefile		\
 	utils/qmail/origip.awk		\
 	utils/qmail/origip.c		\
-	utils/sendmail/origip.pl
+	utils/sendmail/origip.pl	\
+	$(TESTS)
 
 SUBDIRS = .
 
