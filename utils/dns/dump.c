@@ -7,8 +7,8 @@
 ** $Id$
 **
 ** $Log$
-** Revision 1.5  2000/04/21 15:22:54  logic
-** Update to alpha release 19990221.
+** Revision 1.6  2000/04/21 15:22:57  logic
+** Update to current cvs tree.
 **
 ** Revision 1.1  1998/01/27 02:10:34  emarshal
 ** Added dump.c, a quick utility for dumping an RR (sort of);

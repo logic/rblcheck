@@ -1,6 +1,6 @@
 /*
 ** rblcheck 1.5 - Command-line interface to RBL-style filters.
-** Copyright (C) 1997, Edward S. Marshall <emarshal@logic.net>
+** Copyright (C) 1997, 1998, 1999, Edward S. Marshall <emarshal@logic.net>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -44,6 +44,11 @@
 /* NeXT puts optind's declaration in libc.h. */
 #ifdef HAVE_LIBC_H
 #include <libc.h>
+#endif
+
+/* FreeBSD 3.x needs this. */
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
 #endif
 
 /* Unabashedly borrowed from the bind 8.1.1 sources, just in case, since
@@ -104,7 +109,7 @@ int txt = 0;
 void version()
 {
 	fprintf( stderr,
-	  "%s %s, Copyright (C) 1997, 1998 Edward S. Marshall\n",
+	  "%s %s, Copyright (C) 1997, 1998, 1999 Edward S. Marshall\n",
 	  PACKAGE, VERSION );
 }
 
@@ -318,7 +323,6 @@ int main( argc, argv )
 	int argc;
 	char **argv;
 {
-	extern int optind;
 	int a, b, c, d;
 	struct rbl * ptr;
 	int rblfiltered = 0;

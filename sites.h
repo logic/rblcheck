@@ -21,6 +21,12 @@
 
    In other words, if you use one of these, and the world ends, don't
    blame me. You're using them at your own risk.
+
+   You should also visit era eriksson's fine page listing the currently
+   available RBL-alike systems, which will have far more up-to-date
+   information than this file:
+
+       http://www.iki.fi/era/rbl/rbl.html
 */
 
 
@@ -31,6 +37,33 @@
    blacklists of spam-originating systems. Originallys started by
    Paul Vixie, this is the original RBL system. */
 /* SITE("rbl.maps.vix.com") */
+
+
+/* ORBS: Open Relay Behaviour-modification System
+   http://www.orbs.org/
+
+   This is an automated listing of IP addresses that have been tested
+   to host an SMTP server that will transmit at least one message to
+   any system for anyone (an "open email relay"). Mechanisms are also
+   available to remove systems that have closed the relay. */
+/* SITE("relays.orbs.org") */
+
+
+/* IMRSS: The Internet Mail Relay Services Survey
+   http://www.imrss.org/
+
+   This list appears to be similar in scope to ORBS, in that it
+   catalogues open mail relays. */
+/* SITE("mr-out.imrss.org") */
+
+
+/* RRSS: The Radparker Relay Spam Stopper
+   http://relays.radparker.com/
+
+   Like ORBS and IMRSS, this system is a listing of open relays, but
+   the maintainer manually handles addition of relays, and only after
+   evidence of spam from that server has been presented. */
+/* SITE("relays.radparker.com") */
 
 
 /* MAPS DUL: Mail Abuse Protection System Dial-up User List
@@ -44,26 +77,15 @@
 /* SITE("dul.maps.vix.com") */
 
 
-/* ORBS: Open Relay Behaviour-modification System
-   http://www.orbs.org/
-
-   This is an automated listing of IP addresses that have been tested
-   to host an SMTP server that will transmit at least one message to
-   any system for anyone (an "open email relay"). Mechanisms are also
-   available to remove systems that have closed the relay. */
-/* SITE("relays.orbs.org") */
-
-
 /* DSSL: The Direct Spam Sources List
    http://www.imrss.org/dssl/
 
-   This list is similar in intent to the ORCA DUL, but uses a unique
+   This list is similar in intent to the MAPS DUL, but uses a unique
    scheme of matching patterns to dialup IP naming conventions. The
    server looks up the IP you pass it, "compresses" the name, and
    matches it against a series of patterns, returning true or false
    based on a successful or failed match. */
 /* SITE("dssl.imrss.org") */
-
 
 /* The Shub-Internet Blackholes
    http://www.shub-inter.net/
