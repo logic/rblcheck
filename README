@@ -1,51 +1,48 @@
 rblcheck 1.5 - Command-line interface to RBL-style filters.
 Copyright (C) 1997, 1998, 1999, 2000, 2001 Edward S. Marshall <esm@logic.net>
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option)
+any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+675 Mass Ave, Cambridge, MA 02139, USA.
 
 -------------------------------------------------------------------------------
 
 This program is a very basic interface to DNS listings such as the RBL
-filter developed by Paul Vixie and the MAPS project. The basic idea of the
-filter is that when someone is blacklisted for email abuse of some sort, a
-new domain name is resolved of the form "2.0.0.127.domain.name.com", where
+filter operated by the MAPS project. The basic idea of the filter is that
+when someone is listed (for example, a blacklist for email abusers), a new
+domain name is resolved of the form "2.0.0.127.domain.name.com", where
 2.0.0.127 is the abusive IP address in reverse (for example, 2.0.0.127
 would be the IP address 127.0.0.2), and "domain.name.com" is the base
-domain name of the filtering service (such as "rbl.maps.vix.com", for the
-MAPS project RBL filter).
+domain name of the filtering service (such as "blackholes.mail-abuse.org",
+for the MAPS project RBL filter).
 
-For information on compiling this program, see the file docs/INSTALL. For
-generic information on using the supplied "configure" script, see the file
-INSTALL.
+To learn how to build this program, please read docs/INSTALL. Seriously.
 
-This program has only been tested by the author under Linux 2.x, Solaris
-2.5.1, and Solaris 2.6, but there's no reason it shouldn't work on another
-platform, as long as a working resolver library exists (the one from BIND
-will do perfectly).
+rblcheck has only been tested by the author under Red Hat Linux 7.0,
+Debian Linux 2.2r2, and Solaris 7, but there is no reason why it shouldn't
+work on other platforms, assuming a working resolver library exists (the
+one from BIND will work perfectly if your operating system does not supply
+a libresolv). Please see docs/PLATFORMS for more platforms that we think 
+might work.
 
 For more information about RBL-style blacklists, please see the "sites.h"
-file, which contains pointers to several RBL-alike listings.
+file, which contains pointers to several RBL-alike listings, or refer to
+era eriksson's list at http://www.iki.fi/era/rbl/rbl.html .
 
-For more information about BIND, drop by http://www.isc.org/bind.html .
-
-The official home for rblcheck is http://rblcheck.sourceforge.net/ .
-
-Any ideas, bugfixes, porting notes, or requests for pizza delivery
-directions should be sent to me at "esm@logic.net". Don't bug the RBL
-service operators about it, since they didn't write it, and probably
-wouldn't like doing technical support for it.
+The official home for rblcheck is http://rblcheck.sourceforge.net/ . Any
+ideas, bugfixes, porting notes, or requests for pizza delivery directions
+should be sent to the rblcheck mailing list; please see the subscription 
+page at http://lists.sourceforge.net/mailman/listinfo/rblcheck-users/ .
 
 -- 
 Edward S. Marshall <esm@logic.net>

@@ -22,11 +22,22 @@ wish to check against (to un-comment a listing, remove the /* and */
 around the SITE(...) line).
 
 To compile rblcheck, just type "./configure" in the main directory,
-followed by "make" when the first command is complete.
+followed by "make" when the first command is complete. For more details
+on how the "configure" command works, please see the file "INSTALL" in
+the main directory.
+
+Note to developers: if you see a script called "bootstrap" in the main
+directory, then you are using a development release, and you will need a
+few extra tools to compile rblcheck. Specifically, you will need to make
+sure that autoconf and automake are installed correctly on your system
+before you can build. Once you have satisfied those requirements, please
+run "./bootstrap" from the main directory before running the "./configure"
+script mentioned above.
 
 Note to distributors: I highly recommend leaving everything commented out
 in sites.h; this was really only added as a convenience mechanism for
 personal builds, not for a distributor to "help" the user set policy.
+Your users may be smarter than you think; let them make up their own mind.
 
 -- Using:
 
