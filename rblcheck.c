@@ -230,10 +230,10 @@ char * rblcheck( int a, int b, int c, int d, char * rbldomain, int txt )
 	   be a performance hit, since it'll now be cached at the
 	   nameserver we're using. */
 	res_init();
-	res_query( domain, C_IN, T_TXT, answer, PACKETSZ );
+	len = res_query( domain, C_IN, T_TXT, answer, PACKETSZ );
 
 	/* Just in case there's no TXT record... */
-	if( h_errno != 0 )
+	if( len == -1 )
 	{
 		return result;
 	}
