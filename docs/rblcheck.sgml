@@ -58,8 +58,8 @@ The general idea behind RBL-style listings is rapid lookup of IP
 addresses using DNS (for example, for blacklisting IP addresses because
 of abuse). Each IP address is reversed and has a domain name attached to
 it; for example, the IP address 127.0.0.2 would become 2.0.0.127, and then
-a domain such as "blackholes.mail-abuse.org" would be added to it. You
-would then try to resolve the result (ie. 2.0.0.127.blackholes.mail-abuse.org);
+a domain such as "relays.visi.com" would be added to it. You
+would then try to resolve the result (ie. 2.0.0.127.relays.visi.com);
 if you receive a positive reply, then you know that the address is listed.
 Further information can also be queried, such as text descriptions of why
 the address was listed.
@@ -130,7 +130,7 @@ Almost any relatively POSIX platform with a resolver library.
 
 <Para>
 Please send success reports (and what, if anything, you had to change to
-make rblcheck build) for your platform of choice to
+make rblcheck build correctly) for your platform of choice to
 <EMail>rblcheck-users@lists.sourceforge.net</EMail>.
 </Para>
 </Section>
@@ -173,14 +173,29 @@ which has a complete breakdown of all of your options.
 <Section id="building_developers">
 <Title>Note to developers</Title>
 <Para>
-If you see a script called <Application>bootstrap</Application> in the main
-directory, then you are using a development release. These releases are not
-meant for the faint of heart, and you may very well be unable to build them
-without a bit of work.
+You may have received the version of rblcheck that you're currently working
+from via a nightly CVS snapshot (the file you downloaded would likely have
+been called <Application>rblcheck-20020101.tar.gz</Application> or something
+similar), or you might have downloaded a version of the source directly from
+the <ULink url="http://sourceforge.net/cvs/?group_id=2081">CVS</ULink>
+tree. The most distinguishing feature of these developer-only versions is
+the lack of a <Application>configure</Application> script in the main
+distribution directory, and the presense of a
+<Application>bootstrap</Application> script instead. These releases are not
+for the faint of heart, and you may very well be unable to build them
+without a bit of work. As a matter of fact, the documentation you're reading
+right now may not even apply to one of these experimental versions.
 </Para>
 <Para>
-You will need a number of utilities to build from a development source
-release, above and beyond the usual requirements for rblcheck:
+If you are not building a development release, you do NOT need to read this
+section, as none of these instructions apply to you. Please read
+<XRef linkend="building_compiling"> for instructions on how to build a
+normal rblcheck release.
+</Para>
+<Para>
+And with that out of the way, welcome to rblcheck development! You will need
+a number of utilities to build a development release, above and beyond the
+usual build requirements:
 </Para>
 <ItemizedList>
 <ListItem><Para>
@@ -191,32 +206,79 @@ release, above and beyond the usual requirements for rblcheck:
 </Para></ListItem>
 <ListItem><Para>
 <ULink url="http://sources.redhat.com/docbook-tools/">docbook-tools</ULink>
-0.6.8 (the RPM package identifies itself as docbook-utils)
+0.6.8 (the Red Hat RPM package identifies itself as docbook-utils, other
+distributions may name the package differently, if they include it at all)
 </Para></ListItem>
 </ItemizedList>
 <Para>
-Once you've verified that you have these installed, you'll need to run
-<Application>./bootstrap</Application> from the main rblcheck source
-directory, which will set up a few files needed. At this point, you can
-follow the usual instructions for building the application.
+Autoconf and automake are tools which make cross-platform development easier
+by automatically checking for issues related to particular platforms. The
+basic idea is to ensure that even though the primary developers of a piece
+of software may not have access to a wide range of platforms, the chances of
+a successful "out of the box" build will still work. The reality is a little
+different, of course, but it works relatively well. If this sounds like your
+cup of tea, you might be interested in reading the definitive book on GNU
+Autotools: <ULink url="http://sources.redhat.com/autobook/">GNU Autoconf,
+Automake, and Libtool</ULink>.
 </Para>
 <Para>
-If you are not building a development release, you do NOT need the above
-tools, and none of these instructions apply to you. Please see
-<XRef linkend="building_compiling"> for more details.
+The docbook-tools package is required for building multiple formats of the
+documentation included with rblcheck. The documentation is written entirely
+in SGML (Docbook 4.1), and is located in the file
+<Filename>docs/rblcheck.sgml</Filename>.
+</Para>
+<Para>
+Once you've verified that you have these installed, you'll need to run
+<Application>./bootstrap</Application> from the main rblcheck source
+directory, which will create a number of the files you need to complete
+the build. At this point, you should follow the usual instructions for
+building the application (see <XRef linkend="building_compiling">).
 </Para>
 </Section>
 
 <Section id="building_distributors">
-<Title>Note to distributors</Title>
+<Title>Note to distributors and packagers</Title>
 
 <Para>
-I highly recommend leaving everything commented out
-in <Filename>sites.h</Filename>; this was only added as a convenience for
-personal builds, and was never intended to be used to set policy for users.
-If you really must do so, may I suggest adding the necessary items to a
-global <Filename>rblcheckrc</Filename> for use with the
-<Application>rbl</Application> script?
+If you're distributing a pre-built version of rblcheck for your users, I
+strongly recommend leaving everything in <Filename>sites.h</Filename>
+commented out. The ability to add sites there was only added as a convenience
+feature for people building a personal copy for their own use, and was never
+intended to be used to pre-set policy for people using pre-packaged versions.
+</Para>
+<Para>
+Over the years, there has been a great deal of volatility in the RBL listing
+"market"; even the venerable MAPS RBL is no longer publically available
+without making special arrangements. Therefore, along with those pre-defined
+lists of RBL services is built-in obsolescence.
+</Para>
+<Para>
+As a side-note, I don't make new releases just to update the
+<Filename>sites.h</Filename> file, and at some point in the future, I'll
+probably stop seeding it with suggestions. As the package maintainer, you're
+taking on the burden of keeping that up-to-date. Do you really want that
+hassle, or would it just be easier to point your users at a list of RBL
+services that is up-to-date (see the
+<ULink url="http://rblcheck.sourceforge.net/">rblcheck homepage</ULink>
+for links to several current listings)?
+</Para>
+<Para>
+You're also making life a more difficult for the user; users will come to
+depend on that pre-built list of sites. What happens when, by necessity, you
+need to change that built-in list (because some listings are no longer
+available, or because new ones are now online)? Your users will very likely
+complain about the change in behavior, and rightly so. Even worse, what does
+the user do when they disagree with your selection of services? Recompile
+from source (which defeats the purpose of providing them with a pre-compiled
+binary in the first place)? Let them pick their own listings. You and your
+users will be much happier.
+</Para>
+<Para>
+If you feel that you just can't release rblcheck without a built-in list,
+may I suggest using the global <Filename>rblcheckrc</Filename> which the
+<Application>rbl</Application> script uses? At least that way, the end
+user can change your pre-selections on their own, without having to build
+from source.
 </Para>
 </Section>
 </Chapter>
@@ -350,6 +412,7 @@ For example, your personal <Filename>.rblcheckrc</Filename> might contain:
 -m
 -c
 -s relays.ordb.org
+-s relays.visi.com
 -s some.future.rbl.listing</Screen>
 
 <Para>
@@ -620,7 +683,7 @@ supplied above in good health.
 </Para>
 </Section>
 
-<Section id="thirdparty_ident_smtpd">
+<Section id="thirdparty_inetd_smtpd">
 <Title>inetd and smtpd</Title>
 
 <Para>
@@ -671,7 +734,9 @@ and you'll see your idea show up in here in the next release.
 
 <Para>
 There are a number of enhancements to rblcheck that are up for
-consideration, in no particular order:
+consideration, in no particular order. Patches for any of the below
+will earn you fame, fortune, and a warm fuzzy feeling for having
+made the world a better place. ;-)
 </Para>
 
 <ItemizedList>
@@ -690,7 +755,10 @@ Timeout option. Should default to no timeout, but apparently there is
 an issue with rblcheck hanging in an offline environment where the
 nameserver in use is located off-site. This would compensate for the
 misconfiguration, and provide a 'quick-fail' mode for people to play
-with.
+with. I'm still not entirely convinced that this should be rblcheck's
+problem, though; using a local cache like dnscache from
+<ULink url="http://cr.yp.to/djbdns.html">djbdns</ULink> seems like a
+much more reliable solution to what is a general misconfiguration.
 </Para></ListItem>
 
 <ListItem><Para>
@@ -737,7 +805,8 @@ criticism if you feel my logic is flawed.
 <VariableList>
 <VarListEntry>
 <Term>Support for doing lookups of FQDNs</Term>
-<ListItem><Para>
+<ListItem>
+<Para>
 This is a futile method of checking whether a particular system is
 blackholed; if the originating system has control of reverse DNS for
 their IP space, they can make their IP address resolve to anything
@@ -750,7 +819,16 @@ address, look up the reverse, then resolve the reverse to an IP
 address. If both lookups match, then proceed, otherwise exit with a
 failure. I'd consider integrating code from someone who implemented
 this behavior.
-</Para></ListItem>
+</Para>
+<Para>
+(A note for the confused: some people might mistake this for my saying
+that a tool for looking up hosts in DNSBL listings (a means of looking up
+originating domains in a blacklist, much like the RBL) isn't a good idea.
+On the contrary, I'd like to see a complimentary dnsblcheck to go along
+with rblcheck. The problem I have is specifically with resolving the name
+to an IP address for use by an RBL lookup tool.)
+</Para>
+</ListItem>
 </VarListEntry>
 
 <VarListEntry>
@@ -776,8 +854,8 @@ How do you scale beyond 256 RBL services? With the advent of software such as
 <ULink url="http://cr.yp.to/djbdns/rbldns.html">rbldns</ULink> (a part of the
 <ULink url="http://cr.yp.to/djbdns.html">djbdns</ULink> package which allows
 anyone to host an RBL-style service), and with nearly a dozen
-<ULink url="http://www.orbs.org/">ORBS</ULink> domains alone, does this
-limitation seem reasonable?
+<ULink url="http://relays.osirusoft.com/">OsiruSoft</ULink> domains alone,
+does this limitation seem reasonable?
 </Para></ListItem>
 <ListItem><Para>
 How do you report multiple matches with a return code, when the return code
@@ -795,13 +873,13 @@ cases to accomodate them.
 <Term>Integrated scanning of email and similar features</Term>
 <ListItem>
 <Para>
-    This is a question of UNIX philosophy: design one tool for one task,
-    and do it well. There are plenty of far more powerful text parsing
-    tools available which are more appropriate for the job (email parsing
-    is easily handled by tools such as formail, general text parsing is
-    better suited by tools such as sed, awk, perl, python, etc), and they
-    can do a much better job than something that I could integrate into
-    rblcheck while still maintaining a small footprint.
+This is a question of UNIX philosophy: design one tool for one task,
+and do it well. There are plenty of far more powerful text parsing
+tools available which are more appropriate for the job (email parsing
+is easily handled by tools such as formail, general text parsing is
+better suited by tools such as sed, awk, perl, python, etc), and they
+can do a much better job than something that I could integrate into
+rblcheck while still maintaining a small footprint.
 </Para>
 </ListItem>
 </VarListEntry>
