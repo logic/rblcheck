@@ -87,8 +87,7 @@
 
 /*-- GLOBAL VARIABLES -------------------------------------------------------*/
 
-/* Simple linked list to hold the sites we support. See below to see how
-   to change the default list of servers. */
+/* Simple linked list to hold the sites we support. See sites.h. */
 struct rbl
 {
 	char * site;
@@ -120,7 +119,9 @@ void version()
 void usage()
 {
 	version();
-	fprintf( stderr, "Usage: %s [-qtlcvh?] [-s <service>] <address>\n\n\
+	fprintf( stderr,
+	  "Usage: %s [-qtlcvh?] [-s <service>] <address> [ <address> ... ]\n\
+\n\
     -q           Quiet mode; no output\n\
     -t           Print a TXT record, if any\n\
     -m           Stop checking after first address match in any list\n\
@@ -128,7 +129,9 @@ void usage()
     -c           Clear the current list of RBL services\n\
     -s <service> Add a new service to the RBL services list\n\
     -h, -?       Display this help message\n\
-    -v           Display version information\n", progname );
+    -v           Display version information\n\
+    <address>    An IP address to look up; specify `-' to read multiple\n\
+                 addresses from standard input.", progname );
 }
 
 /* togglesite()
