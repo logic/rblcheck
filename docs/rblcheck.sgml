@@ -635,6 +635,20 @@ and any errors received. This could be best implemented with a '-v X'
 option, where 'X' is a number between 0 and 9 (0 being silent, 4 being
 default/ordinary output, 9 displaying heavy debugging info).
 </Para></ListItem>
+
+<ListItem><Para>
+Add an option to display the PTR address returned by the original query,
+prior to following it.
+</Para></ListItem>
+
+<ListItem><Para>
+(from Craig Callender <EMail>craig@mosquitonet.com</EMAIL>)
+Add the ability to specify a particular PTR address; for example, when
+performing a lookup in ORBS, allow for matching against only a specific
+returned address (such as 127.0.0.2). Perhaps allow a list of these
+matches. The question is: is this better implemented here, or in the
+caller via a filter (after the display of PTR addresses is added)?
+</Para></ListItem>
 </ItemizedList>
 
 <Para>
