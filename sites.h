@@ -59,3 +59,7 @@
 /* SITE("spamsource-netblocks.orbs.org") */
 /* SITE("testing.orbs.org") */
 /* SITE("ok.orbs.org") */
+
+/* RFC-Ignorant.Org
+   http://www.rfc-ignorant.org/ */
+/* SITE("dsn.rfc-ignorant.org") */
