@@ -8,6 +8,8 @@ noinst_HEADERS = sites.h
 bin_PROGRAMS = rblcheck
 rblcheck_SOURCES = rblcheck.c
 
+bin_SCRIPTS = rbl
+
 XFAIL_TESTS = \
 	tests/maps/rbl/listed tests/maps/rbl/unlisted \
 	tests/maps/rss/listed tests/maps/rss/unlisted \
@@ -24,6 +26,7 @@ TESTS = tests/clearlist tests/addlisting tests/removelisting $(XFAIL_TESTS)
 # in a "make distcheck". Since all tests are shell scripts, we're including
 # the full list verbatim.
 EXTRA_DIST = \
+	rbl.in				\
 	config/install-sh		\
 	config/missing			\
 	config/mkinstalldirs		\
@@ -48,7 +51,7 @@ MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.in stamp-h.in \
 
 DISTCLEANFILES = config/rblcheck.spec config/pkginfo
 
-CLEANFILES = config/Prototype
+CLEANFILES = config/Prototype rbl
 
 ACLOCAL = aclocal -I $(auxdir)
 
@@ -63,3 +66,10 @@ solarispkg: $(bin_PROGRAMS)
 	pkgmk -d config -f config/Prototype -r $(distdir)
 	pkgtrans config ../$(distdir).pkg rblcheck
 	rm -rf $(distdir) config/rblcheck
+
+rbl: rbl.in
+	rm -f $@ $@.tmp
+	sed -e 's,@bindir\@,$(bindir),g' \
+	  -e 's,@sysconfdir\@,$(sysconfdir),g' $< >$@.tmp
+	chmod +x $@.tmp
+	mv $@.tmp $@
