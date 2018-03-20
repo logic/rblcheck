@@ -1,8 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(rblcheck.c)
-AC_CONFIG_AUX_DIR(config)
-AM_CONFIG_HEADER(config.h:config.in)
-AM_INIT_AUTOMAKE(rblcheck, 1.5)
+AC_INIT([rblcheck], [1.5])
+AC_CONFIG_SRCDIR([rblcheck.c])
+AC_CONFIG_AUX_DIR([config])
+AM_CONFIG_HEADER([config.h:config.in])
+AM_INIT_AUTOMAKE
 
 AM_MAINTAINER_MODE
 
@@ -12,19 +13,38 @@ AC_PROG_INSTALL
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(unistd.h)
-AC_CHECK_HEADERS(getopt.h)
-AC_CHECK_HEADERS(libc.h)
+AC_CHECK_HEADERS([unistd.h])
+AC_CHECK_HEADERS([getopt.h])
+AC_CHECK_HEADERS([libc.h])
 
-dnl Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-
-dnl Figure out where to get res_query from.
-AC_CHECK_FUNC(res_query,,
-  AC_CHECK_LIB(bind,res_query,,
-    AC_CHECK_LIB(resolv,res_query,,
-      AC_CHECK_LIB(minires -liphlpapi,__res_query,,
-        AC_MSG_ERROR(cannot locate res_query function)))))
+dnl check for res_query in libc, libbind and libresolv
+dnl from https://github.com/rxwen/gloox/blob/master/configure.ac
+AC_CHECK_FUNCS(res_query)
+if test "x-$ac_cv_func_res_query" = "x-yes" ; then
+  have_res_query=yes
+else
+  AC_CHECK_LIB(resolv, res_query)
+  if test "x-$ac_cv_lib_resolv_res_query" = "x-yes" ; then
+    have_res_query=yes
+    AC_DEFINE(HAVE_RES_QUERY)
+  else
+    AC_CHECK_LIB(bind, res_query)
+    if test "x-$ac_cv_lib_bind_res_query" = "x-yes" ; then
+      have_res_query=yes
+      AC_DEFINE(HAVE_RES_QUERY)
+    else
+      AC_MSG_CHECKING([for res_query in -lresolv (alternate version)])
+      save_libs="$LIBS"
+      LIBS="-lresolv $LIBS"
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[res_query(0,0,0,0,0)]])],
+                     [AC_MSG_RESULT(yes)
+                      AC_DEFINE(HAVE_RES_QUERY)
+                      have_res_query=yes],
+                     [AC_MSG_RESULT(no)
+                     LIBS="$save_libs"])
+    fi
+  fi
+fi
 
 dnl All done.
 AC_OUTPUT(Makefile docs/Makefile config/rblcheck.spec config/pkginfo)
