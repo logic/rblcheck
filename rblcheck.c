@@ -328,9 +328,7 @@ int full_rblcheck( char * addr )
 
 /*-- MAINLINE ---------------------------------------------------------------*/
 
-int main( argc, argv )
-	int argc;
-	char **argv;
+int main( int argc, char ** argv )
 {
 	int a;
 	struct rbl * ptr;
